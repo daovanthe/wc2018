@@ -38,7 +38,7 @@ public class WcService extends Service {
         Log.d(TAG, "service WC created");
         //  Write a message to the database
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("test1").document("doc1");
+//        DocumentReference docRef = db.collection("test1").document("doc1");
         db.collection("test1")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -47,17 +47,21 @@ public class WcService extends Service {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-//                                DataFireBase city = document.toObject(DataFireBase.class);
-//                                fixturesApi = new FixturesAPI(city.getKey(), city.getSecret(), city.getLegue1());
-//                                leagueApi = new LeaguesApi(city.getKey(), city.getSecret(), city.getLegue1());
-//                                scoreApi = new ScoreApi(city.getKey(), city.getSecret(), city.getLegue1());
-//                                runTask();
+                                DataFireBase city = document.toObject(DataFireBase.class);
+                                fixturesApi = new FixturesAPI(city.getKey(), city.getSecret(), city.getLegue1());
+                                leagueApi = new LeaguesApi(city.getKey(), city.getSecret(), city.getLegue1());
+                                scoreApi = new ScoreApi(city.getKey(), city.getSecret(), city.getLegue1());
+                                runTask();
                             }
+
+
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
                     }
                 });
+
+
     }
 
     public void runTask() {

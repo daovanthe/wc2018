@@ -8,6 +8,12 @@ public abstract class API {
         return key;
     }
 
+    public API(String key, String secret, String[] legue1) {
+        this.key = key;
+        this.secrete = secrete;
+        this.leagueIDs = leagueIDs;
+    }
+
     public void setKey(String key) {
         this.key = key;
     }

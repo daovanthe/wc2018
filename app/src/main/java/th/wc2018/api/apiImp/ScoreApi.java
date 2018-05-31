@@ -14,6 +14,10 @@ public class ScoreApi extends API {
 
     private static final String LINK = "http://livescore-api.com/api-client/scores/live.json?";
 
+    public ScoreApi(String key, String secret, String[] legue1) {
+        super(key, secret, legue1);
+    }
+
 
     @Override
     public void getObject() {

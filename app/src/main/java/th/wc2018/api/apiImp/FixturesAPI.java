@@ -14,6 +14,10 @@ public class FixturesAPI extends API {
 
     private static final String LINK = "http://livescore-api.com/api-client/fixtures/matches.json?";
 
+    public FixturesAPI(String key, String secret, String[] legue1) {
+        super(key, secret, legue1);
+    }
+
 
     @Override
     public void getObject() {

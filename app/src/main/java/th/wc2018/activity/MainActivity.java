@@ -37,7 +37,9 @@ public class MainActivity extends Activity {
         Intent serviceIntent = new Intent();
         serviceIntent.setPackage("th.wc2018");
         serviceIntent.setClass(this, WcService.class);
-        bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
+//        bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
+        startService(serviceIntent);
+
     }
 
     @Override

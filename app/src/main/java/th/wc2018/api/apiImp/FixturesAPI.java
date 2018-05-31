@@ -7,9 +7,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.MediaType;
-
 import th.wc2018.api.API;
 import wc2018.data.raw.Fixtures;
 
@@ -37,9 +34,9 @@ public class FixturesAPI extends API {
 
     private void loadApiToObject(String command) {
         //TO-DO
-        String json = ClientBuilder.newClient().target(command).request().accept(MediaType.APPLICATION_JSON).get(String.class);
+//        String json = ClientBuilder.newClient().target(command).request().accept(MediaType.APPLICATION_JSON).get(String.class);
         JsonParser parser = new JsonParser();
-        JsonObject obj = parser.parse(json).getAsJsonObject();
+        JsonObject obj = parser.parse(command).getAsJsonObject();
         JsonArray subArgs = obj.get("data").getAsJsonObject()
                 .get("fixtures").getAsJsonArray();
 

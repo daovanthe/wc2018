@@ -60,10 +60,9 @@ public class WcService extends Service {
                 while (true) {
                     try {
                         count++;
-                        Thread.sleep(1800000);
                         Log.d(TAG, "get API automatically");
                         getObjectApi();
-
+                        Thread.sleep(1800000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

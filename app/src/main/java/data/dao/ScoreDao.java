@@ -7,7 +7,8 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import wc2018.data.raw.Score;
+import data.raw.Score;
+
 
 @Dao
 public interface ScoreDao {

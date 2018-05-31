@@ -7,7 +7,8 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import wc2018.data.raw.Fixtures;
+import data.raw.Fixtures;
+
 
 @Dao
 public interface FixturesDao {

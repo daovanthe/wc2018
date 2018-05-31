@@ -7,8 +7,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import data.raw.Fixtures;
 import th.wc2018.api.API;
-import wc2018.data.raw.Fixtures;
 
 public class FixturesAPI extends API {
 

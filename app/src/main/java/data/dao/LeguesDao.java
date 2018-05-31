@@ -7,7 +7,8 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import wc2018.data.raw.Legues;
+import data.raw.Legues;
+
 
 @Dao
 public interface LeguesDao {

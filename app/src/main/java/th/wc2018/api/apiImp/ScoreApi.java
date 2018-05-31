@@ -7,8 +7,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import data.raw.Score;
 import th.wc2018.api.API;
-import wc2018.data.raw.Score;
 
 public class ScoreApi extends API {
 

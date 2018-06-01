@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -38,28 +39,37 @@ public class WcService extends Service {
         Log.d(TAG, "service WC created");
         //  Write a message to the database
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        DocumentReference docRef = db.collection("test1").document("doc1");
-        db.collection("test1")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                DataFireBase city = document.toObject(DataFireBase.class);
-                                fixturesApi = new FixturesAPI(city.getKey(), city.getSecret(), city.getLegue1());
-                                leagueApi = new LeaguesApi(city.getKey(), city.getSecret(), city.getLegue1());
-                                scoreApi = new ScoreApi(city.getKey(), city.getSecret(), city.getLegue1());
-                                runTask();
-                            }
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        db.setFirestoreSettings(settings);
+//        db.collection("test1")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d(TAG, document.getId() + " => " + document.getData());
+//                                DataFireBase city = document.toObject(DataFireBase.class);
+//                                fixturesApi = new FixturesAPI(city.getKey(), city.getSecret(), city.getLegue1());
+//                                leagueApi = new LeaguesApi(city.getKey(), city.getSecret(), city.getLegue1());
+//                                scoreApi = new ScoreApi(city.getKey(), city.getSecret(), city.getLegue1());
+//                                runTask();
+//                            }
+//
+//
+//                        } else {
+//                            Log.w(TAG, "Error getting documents.", task.getException());
+//                        }
+//                    }
+//                });
 
+        fixturesApi = new FixturesAPI();
+        leagueApi = new LeaguesApi();
+        scoreApi = new ScoreApi();
+        runTask();
 
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
 
 
     }

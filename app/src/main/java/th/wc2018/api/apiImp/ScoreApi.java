@@ -18,6 +18,10 @@ public class ScoreApi extends API {
         super(key, secret, legue1);
     }
 
+    public ScoreApi() {
+
+    }
+
 
     @Override
     public void getObject() {
@@ -37,15 +41,16 @@ public class ScoreApi extends API {
     private Gson gson = new Gson();
 
     private void loadApiToObject(String command) {
+        String data = getJsonString(command);
         //TO-DO
 //        String json = ClientBuilder.newClient().target(command).request().accept(MediaType.APPLICATION_JSON).get(String.class);
         JsonParser parser = new JsonParser();
-        JsonObject obj = parser.parse(command).getAsJsonObject();
+        JsonObject obj = parser.parse(data).getAsJsonObject();
         JsonArray subArgs = obj.get("data").getAsJsonObject()
                 .get("match").getAsJsonArray();
 
-        String jsonArrayFixtures = subArgs.getAsString();
-        Score[] fixtures = gson.fromJson(jsonArrayFixtures, Score[].class);
+//        String jsonArrayFixtures = subArgs.getAsString();
+        Score[] fixtures = gson.fromJson(subArgs.toString(), Score[].class);
         // add to database
 
 

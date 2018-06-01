@@ -18,6 +18,10 @@ public class FixturesAPI extends API {
         super(key, secret, legue1);
     }
 
+    public FixturesAPI() {
+
+    }
+
 
     @Override
     public void getObject() {
@@ -30,6 +34,7 @@ public class FixturesAPI extends API {
             apiCommand.append("&league=" + legueID);
             // extract Object
             //TO-DO
+
             loadApiToObject(apiCommand.toString());
         }
     }
@@ -37,15 +42,16 @@ public class FixturesAPI extends API {
     private Gson gson = new Gson();
 
     private void loadApiToObject(String command) {
+        String data = getJsonString(command);
         //TO-DO
 //        String json = ClientBuilder.newClient().target(command).request().accept(MediaType.APPLICATION_JSON).get(String.class);
         JsonParser parser = new JsonParser();
-        JsonObject obj = parser.parse(command).getAsJsonObject();
+        JsonObject obj = parser.parse(data).getAsJsonObject();
         JsonArray subArgs = obj.get("data").getAsJsonObject()
                 .get("fixtures").getAsJsonArray();
 
-        String jsonArrayFixtures = subArgs.getAsString();
-        Fixtures[] fixtures = gson.fromJson(jsonArrayFixtures, Fixtures[].class);
+//        String jsonArrayFixtures = subArgs.getAsString();
+        Fixtures[] fixtures = gson.fromJson(subArgs.toString(), Fixtures[].class);
         // add to database
 
     }

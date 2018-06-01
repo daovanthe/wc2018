@@ -13,6 +13,10 @@ public class LeaguesApi extends API {
         super(key, secret, legue1);
     }
 
+    public LeaguesApi() {
+
+    }
+
 
     @Override
     public void getObject() {

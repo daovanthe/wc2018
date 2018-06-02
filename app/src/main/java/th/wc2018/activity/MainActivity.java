@@ -18,18 +18,25 @@ import th.wc2018.WcService;
 public class MainActivity extends Activity {
 
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fullscreen);
+        setContentView(R.layout.main_matches_layout);
+
+
 
     }
+
+
 
 
     public void refresh() {
 
     }
 
+    //region SERVICE_CONNECT
 
     @Override
     protected void onStart() {
@@ -71,5 +78,6 @@ public class MainActivity extends Activity {
         }
     };
 
+    //endregion
 
 }

@@ -21,10 +21,10 @@
 
         <TextView
             android:id="@+id/home_name"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:text="Phan rang thap cham"
+            android:text="Phan Rang thao cham"
             app:fontFamily="@font/amiko_semibold" />
 
         <LinearLayout
@@ -64,7 +64,7 @@
 
         <TextView
             android:id="@+id/away_name"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
             android:gravity="right"
@@ -79,84 +79,4 @@
             app:srcCompat="@mipmap/ic_launcher" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/home_pic2"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:contentDescription="flag"
-                    app:srcCompat="@mipmap/ic_launcher" />
-
-                <TextView
-                    android:id="@+id/home_name2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Phan rang thap cham"
-                    app:fontFamily="@font/amiko_semibold" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="top|center_vertical"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/match_group"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="Group A"
-                        android:textSize="12sp"
-                        app:fontFamily="@font/amiko_bold" />
-
-                    <TextView
-                        android:id="@+id/match_id"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="Match 1"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/match_time"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="22:00"
-                        android:textSize="24sp"
-                        app:fontFamily="@font/pt_sans" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/away_name3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="Viet Nam"
-                    app:fontFamily="@font/amiko_semibold" />
-
-                <ImageView
-                    android:id="@+id/away_pic3"
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    app:srcCompat="@mipmap/ic_launcher" />
-
-            </TableRow>
-
-        </TableLayout>
-    </LinearLayout>
 </LinearLayout>

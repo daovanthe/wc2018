@@ -11,7 +11,7 @@ import data.raw.Fixtures;
 
 
 @Dao
-public interface FixturesDao  {
+public interface FixturesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insert(Fixtures... fixtures);
@@ -21,5 +21,14 @@ public interface FixturesDao  {
 
     @Query("SELECT * FROM fixtures WHERE id = :fixtureId ")
     public List<Fixtures> getFixturesById(String fixtureId);
+
+    @Query("SELECT distinct date FROM fixtures Order by date")
+    public List<String> getDay();
+
+    @Query("SELECT time FROM fixtures where date = :date")
+    public List<String> getTime(String date);
+
+    @Query("SELECT * FROM fixtures WHERE date = :date  ")
+    public List<Fixtures> getMatchByDay(String date );
 
 }

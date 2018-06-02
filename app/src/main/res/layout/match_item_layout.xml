@@ -3,13 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
 
         <ImageView
             android:id="@+id/home_pic"
@@ -17,6 +20,8 @@
             android:layout_height="32dp"
             android:layout_weight="0.03"
             android:contentDescription="flag"
+            android:elevation="4dp"
+            android:translationZ="4dp"
             app:srcCompat="@mipmap/ic_launcher" />
 
         <TextView
@@ -24,7 +29,10 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
+            android:paddingLeft="4dp"
             android:text="Phan Rang thao cham"
+            android:textColor="@android:color/background_light"
+            android:textSize="14sp"
             app:fontFamily="@font/amiko_semibold" />
 
         <LinearLayout
@@ -38,8 +46,10 @@
                 android:id="@+id/match_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:elevation="10dp"
                 android:gravity="center_horizontal"
                 android:text="Group A"
+                android:textColor="@android:color/background_light"
                 android:textSize="12sp"
                 app:fontFamily="@font/amiko_bold" />
 
@@ -49,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="Match 1"
+                android:textColor="@android:color/background_light"
                 android:textSize="12sp" />
 
             <TextView
@@ -57,8 +68,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="22:00"
+                android:textColor="@android:color/background_light"
                 android:textSize="24sp"
-                app:fontFamily="@font/pt_sans" />
+                app:fontFamily="@font/aldrich" />
 
         </LinearLayout>
 
@@ -68,7 +80,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
             android:gravity="right"
+            android:paddingRight="4dp"
             android:text="Viet Nam"
+            android:textColor="@android:color/background_light"
+            android:textSize="14sp"
             app:fontFamily="@font/amiko_semibold" />
 
         <ImageView
@@ -76,6 +91,8 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="0.03"
+            android:elevation="4dp"
+            android:translationZ="4dp"
             app:srcCompat="@mipmap/ic_launcher" />
     </LinearLayout>
 

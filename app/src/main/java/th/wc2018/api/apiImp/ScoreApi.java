@@ -52,7 +52,9 @@ public class ScoreApi extends API {
 //        String jsonArrayFixtures = subArgs.getAsString();
         Score[] fixtures = gson.fromJson(subArgs.toString(), Score[].class);
         // add to database
-
-
+        if (mOnLoadApiComletedListener != null) {
+            mOnLoadApiComletedListener.loadApiCompleted(fixtures);
+        }
     }
+
 }

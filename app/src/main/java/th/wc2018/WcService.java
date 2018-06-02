@@ -4,23 +4,18 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCanceledListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import data.firebase.DataFireBase;
+import data.obtain.LoadData;
+import data.raw.Fixtures;
+import data.raw.Leagues;
+import data.raw.Score;
 import th.wc2018.api.API;
+import th.wc2018.api.OnLoadApiCompletedListener;
 import th.wc2018.api.apiImp.FixturesAPI;
 import th.wc2018.api.apiImp.LeaguesApi;
 import th.wc2018.api.apiImp.ScoreApi;
@@ -66,12 +61,36 @@ public class WcService extends Service {
 //                });
 
         fixturesApi = new FixturesAPI();
+        fixturesApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
+            @Override
+            public void loadApiCompleted(Object... result) {
+                Fixtures[] fixturesData = (Fixtures[]) result;
+                mLoadData.getFixturesDao().insert(fixturesData);
+            }
+        });
+
+
         leagueApi = new LeaguesApi();
+//        leagueApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
+//            @Override
+//            public void loadApiCompleted(Object... result) {
+//                Leagues[] LeguesData = (Leagues[]) result;
+//                mLoadData.getLeaguesDao().insert(LeguesData);
+//            }
+//        });
+
+
         scoreApi = new ScoreApi();
+        scoreApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
+            @Override
+            public void loadApiCompleted(Object... result) {
+                Score[] scoreData = (Score[]) result;
+                mLoadData.getScoreDao().insert(scoreData);
+            }
+        });
+
+
         runTask();
-
-
-
     }
 
     public void runTask() {
@@ -140,4 +159,10 @@ public class WcService extends Service {
         }
     }
 
+
+    private LoadData mLoadData;
+
+    public void startLoadData(LoadData loadData) {
+        mLoadData = loadData;
+    }
 }

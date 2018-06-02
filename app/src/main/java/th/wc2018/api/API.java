@@ -16,9 +16,10 @@ public abstract class API {
         return key;
     }
 
-    public API () {
+    public API() {
 
     }
+
     public API(String key, String secret, String[] legue1) {
         this.key = key;
         this.secrete = secrete;
@@ -78,5 +79,11 @@ public abstract class API {
         String result = bufferReader.toString();
         bufferReader.setLength(0);
         return result;
+    }
+
+    protected OnLoadApiCompletedListener mOnLoadApiComletedListener;
+
+    public void AddOnLoadApiCOmpleteListener(OnLoadApiCompletedListener pOnLoadApiComletedListener) {
+        mOnLoadApiComletedListener = pOnLoadApiComletedListener;
     }
 }

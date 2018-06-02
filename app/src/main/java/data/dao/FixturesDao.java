@@ -11,7 +11,7 @@ import data.raw.Fixtures;
 
 
 @Dao
-public interface FixturesDao {
+public interface FixturesDao  {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insert(Fixtures... fixtures);

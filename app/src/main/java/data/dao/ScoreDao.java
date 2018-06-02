@@ -11,7 +11,7 @@ import data.raw.Score;
 
 
 @Dao
-public interface ScoreDao {
+public interface ScoreDao   {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insert(Score... scores);

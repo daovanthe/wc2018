@@ -10,7 +10,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 
-
+import data.obtain.LoadData;
 import th.wc2018.R;
 import th.wc2018.WcService;
 
@@ -37,8 +37,8 @@ public class MainActivity extends Activity {
         Intent serviceIntent = new Intent();
         serviceIntent.setPackage("th.wc2018");
         serviceIntent.setClass(this, WcService.class);
-//        bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
-        startService(serviceIntent);
+        bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
+//        startService(serviceIntent);
 
     }
 
@@ -60,6 +60,8 @@ public class MainActivity extends Activity {
         public void onServiceConnected(ComponentName className, IBinder service) {
             WcService.LocalBinder binder = (WcService.LocalBinder) service;
             mservice = binder.getService();
+            LoadData loadData = new LoadData(MainActivity.this, "wcdata");
+            mservice.startLoadData(loadData);
             isBound = true;
         }
 
@@ -68,4 +70,6 @@ public class MainActivity extends Activity {
             isBound = false;
         }
     };
+
+
 }

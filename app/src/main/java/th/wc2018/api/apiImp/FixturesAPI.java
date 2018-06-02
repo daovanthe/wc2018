@@ -39,6 +39,8 @@ public class FixturesAPI extends API {
         }
     }
 
+
+
     private Gson gson = new Gson();
 
     private void loadApiToObject(String command) {
@@ -53,6 +55,8 @@ public class FixturesAPI extends API {
 //        String jsonArrayFixtures = subArgs.getAsString();
         Fixtures[] fixtures = gson.fromJson(subArgs.toString(), Fixtures[].class);
         // add to database
-
+        if (mOnLoadApiComletedListener != null) {
+            mOnLoadApiComletedListener.loadApiCompleted(fixtures);
+        }
     }
 }

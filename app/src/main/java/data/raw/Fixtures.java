@@ -1,5 +1,6 @@
 package data.raw;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
@@ -10,15 +11,33 @@ public class Fixtures {
     @PrimaryKey
     @NonNull
     private String id;
+
+    @ColumnInfo(name = "date")
     private String date;
+
+    @ColumnInfo(name = "time")
     private String time;
+
+    @ColumnInfo(name = "round")
     private String round;
-    private String homeName;
-    private String awayName;
+
+    @ColumnInfo(name = "home_name")
+    private String home_name;
+
+    @ColumnInfo(name = "away_name")
+    private String away_name;
+
+    @ColumnInfo(name = "location")
     private String location;
-    private String leagueId;
-    private String homeId;
-    private String awayId;
+
+    @ColumnInfo(name = "league_id")
+    private String league_id;
+
+    @ColumnInfo(name = "home_id")
+    private String home_id;
+
+    @ColumnInfo(name = "away_id")
+    private String away_id;
 
     public Fixtures() {
     }
@@ -56,20 +75,20 @@ public class Fixtures {
         this.round = round;
     }
 
-    public String getHomeName() {
-        return homeName;
+    public String getHome_name() {
+        return home_name;
     }
 
-    public void setHomeName(String homeName) {
-        this.homeName = homeName;
+    public void setHome_name(String home_name) {
+        this.home_name = home_name;
     }
 
-    public String getAwayName() {
-        return awayName;
+    public String getAway_name() {
+        return away_name;
     }
 
-    public void setAwayName(String awayName) {
-        this.awayName = awayName;
+    public void setAway_name(String away_name) {
+        this.away_name = away_name;
     }
 
     public String getLocation() {
@@ -80,28 +99,28 @@ public class Fixtures {
         this.location = location;
     }
 
-    public String getLeagueId() {
-        return leagueId;
+    public String getLeague_id() {
+        return league_id;
     }
 
-    public void setLeagueId(String leagueId) {
-        this.leagueId = leagueId;
+    public void setLeague_id(String league_id) {
+        this.league_id = league_id;
     }
 
-    public String getHomeId() {
-        return homeId;
+    public String getHome_id() {
+        return home_id;
     }
 
-    public void setHomeId(String homeId) {
-        this.homeId = homeId;
+    public void setHome_id(String home_id) {
+        this.home_id = home_id;
     }
 
-    public String getAwayId() {
-        return awayId;
+    public String getAway_id() {
+        return away_id;
     }
 
-    public void setAwayId(String awayId) {
-        this.awayId = awayId;
+    public void setAway_id(String away_id) {
+        this.away_id = away_id;
     }
 
     @Override
@@ -111,12 +130,12 @@ public class Fixtures {
                 ", date='" + date + '\'' +
                 ", time='" + time + '\'' +
                 ", round='" + round + '\'' +
-                ", homeName='" + homeName + '\'' +
-                ", awayName='" + awayName + '\'' +
+                ", home_name='" + home_name + '\'' +
+                ", away_name='" + away_name + '\'' +
                 ", location='" + location + '\'' +
-                ", leagueId='" + leagueId + '\'' +
-                ", homeId='" + homeId + '\'' +
-                ", awayId='" + awayId + '\'' +
+                ", league_id='" + league_id + '\'' +
+                ", home_id='" + home_id + '\'' +
+                ", away_id='" + away_id + '\'' +
                 '}';
     }
 }

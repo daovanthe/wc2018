@@ -1,5 +1,6 @@
 package data.raw;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
@@ -11,20 +12,50 @@ public class Score {
     @PrimaryKey
     @NonNull
     private String id;
-    private String homeName;
-    private String awayName;
+
+    @ColumnInfo(name = "home_name")
+    private String home_name;
+
+    @ColumnInfo(name = "away_name")
+    private String away_name;
+
+    @ColumnInfo(name = "score")
     private String score;
-    private String htScore;
-    private String ftScore;
-    private String etScore;
+
+    @ColumnInfo(name = "ht_score")
+    private String ht_score;
+
+    @ColumnInfo(name = "ft_score")
+    private String ft_score;
+
+    @ColumnInfo(name = "et_score")
+    private String et_score;
+
+    @ColumnInfo(name = "time")
     private String time;
-    private String leagueId;
-    private String leagueName;
+
+    @ColumnInfo(name = "league_id")
+    private String league_id;
+
+    @ColumnInfo(name = "league_name")
+    private String league_name;
+
+    @ColumnInfo(name = "added")
     private String added;
-    private String lastChanged;
+
+    @ColumnInfo(name = "last_changed")
+    private String last_changed;
+
+    @ColumnInfo(name = "status")
     private String status;
-    private String homeId;
+
+    @ColumnInfo(name = "home_id")
+    private String home_id;
+
+    @ColumnInfo(name = "away_id")
     private String awayId;
+
+    @ColumnInfo(name = "events")
     private String events;
 
     public Score() {
@@ -39,20 +70,20 @@ public class Score {
         this.id = id;
     }
 
-    public String getHomeName() {
-        return homeName;
+    public String getHome_name() {
+        return home_name;
     }
 
-    public void setHomeName(String homeName) {
-        this.homeName = homeName;
+    public void setHome_name(String home_name) {
+        this.home_name = home_name;
     }
 
-    public String getAwayName() {
-        return awayName;
+    public String getAway_name() {
+        return away_name;
     }
 
-    public void setAwayName(String awayName) {
-        this.awayName = awayName;
+    public void setAway_name(String away_name) {
+        this.away_name = away_name;
     }
 
     public String getScore() {
@@ -63,28 +94,28 @@ public class Score {
         this.score = score;
     }
 
-    public String getHtScore() {
-        return htScore;
+    public String getHt_score() {
+        return ht_score;
     }
 
-    public void setHtScore(String htScore) {
-        this.htScore = htScore;
+    public void setHt_score(String ht_score) {
+        this.ht_score = ht_score;
     }
 
-    public String getFtScore() {
-        return ftScore;
+    public String getFt_score() {
+        return ft_score;
     }
 
-    public void setFtScore(String ftScore) {
-        this.ftScore = ftScore;
+    public void setFt_score(String ft_score) {
+        this.ft_score = ft_score;
     }
 
-    public String getEtScore() {
-        return etScore;
+    public String getEt_score() {
+        return et_score;
     }
 
-    public void setEtScore(String etScore) {
-        this.etScore = etScore;
+    public void setEt_score(String et_score) {
+        this.et_score = et_score;
     }
 
     public String getTime() {
@@ -95,20 +126,20 @@ public class Score {
         this.time = time;
     }
 
-    public String getLeagueId() {
-        return leagueId;
+    public String getLeague_id() {
+        return league_id;
     }
 
-    public void setLeagueId(String leagueId) {
-        this.leagueId = leagueId;
+    public void setLeague_id(String league_id) {
+        this.league_id = league_id;
     }
 
-    public String getLeagueName() {
-        return leagueName;
+    public String getLeague_name() {
+        return league_name;
     }
 
-    public void setLeagueName(String leagueName) {
-        this.leagueName = leagueName;
+    public void setLeague_name(String league_name) {
+        this.league_name = league_name;
     }
 
     public String getAdded() {
@@ -119,12 +150,12 @@ public class Score {
         this.added = added;
     }
 
-    public String getLastChanged() {
-        return lastChanged;
+    public String getLast_changed() {
+        return last_changed;
     }
 
-    public void setLastChanged(String lastChanged) {
-        this.lastChanged = lastChanged;
+    public void setLast_changed(String last_changed) {
+        this.last_changed = last_changed;
     }
 
     public String getStatus() {
@@ -135,12 +166,12 @@ public class Score {
         this.status = status;
     }
 
-    public String getHomeId() {
-        return homeId;
+    public String getHome_id() {
+        return home_id;
     }
 
-    public void setHomeId(String homeId) {
-        this.homeId = homeId;
+    public void setHome_id(String home_id) {
+        this.home_id = home_id;
     }
 
     public String getAwayId() {
@@ -163,19 +194,19 @@ public class Score {
     public String toString() {
         return "Score{" +
                 "id='" + id + '\'' +
-                ", homeName='" + homeName + '\'' +
-                ", awayName='" + awayName + '\'' +
+                ", home_name='" + home_name + '\'' +
+                ", away_name='" + away_name + '\'' +
                 ", score='" + score + '\'' +
-                ", htScore='" + htScore + '\'' +
-                ", ftScore='" + ftScore + '\'' +
-                ", etScore='" + etScore + '\'' +
+                ", ht_score='" + ht_score + '\'' +
+                ", ft_score='" + ft_score + '\'' +
+                ", et_score='" + et_score + '\'' +
                 ", time='" + time + '\'' +
-                ", leagueId='" + leagueId + '\'' +
-                ", leagueName='" + leagueName + '\'' +
+                ", league_id='" + league_id + '\'' +
+                ", league_name='" + league_name + '\'' +
                 ", added='" + added + '\'' +
-                ", lastChanged='" + lastChanged + '\'' +
+                ", last_changed='" + last_changed + '\'' +
                 ", status='" + status + '\'' +
-                ", homeId='" + homeId + '\'' +
+                ", home_id='" + home_id + '\'' +
                 ", awayId='" + awayId + '\'' +
                 ", events='" + events + '\'' +
                 '}';

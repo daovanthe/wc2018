@@ -14,12 +14,14 @@ public class LeaguesApi extends API {
     }
 
     public LeaguesApi() {
-
     }
-
 
     @Override
     public void getObject() {
         Log.d(TAG, "LeaguesApi -> getObject()");
+
+        if (mOnLoadApiComletedListener != null) {
+            mOnLoadApiComletedListener.loadApiCompleted();
+        }
     }
 }

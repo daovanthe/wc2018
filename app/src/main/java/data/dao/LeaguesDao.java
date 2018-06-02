@@ -7,18 +7,18 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import data.raw.Legues;
+import data.raw.Leagues;
 
 
 @Dao
-public interface LeguesDao {
+public interface LeaguesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insert(Legues... legues);
+    public void insert(Leagues... legues);
 
-    @Query("SELECT * FROM legues")
-    public List<Legues> getLegues();
+    @Query("SELECT * FROM leagues")
+    public List<Leagues> getLegues();
 
-    @Query("SELECT * FROM legues WHERE leagueId = :leagueId ")
-    public List<Legues> getLeguesById(String leagueId);
+    @Query("SELECT * FROM leagues WHERE leagueId = :leagueId ")
+    public List<Leagues> getLeguesById(String leagueId);
 }

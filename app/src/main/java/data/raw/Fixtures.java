@@ -61,6 +61,21 @@ public class Fixtures {
         this.match_id = match_id;
     }
 
+    public Fixtures(@NonNull String id, String date, String time, String round, String home_name, String away_name, String location, String league_id, String home_id, String away_id, String group_id, String match_id) {
+        this.id = id;
+        this.date = date;
+        this.time = time;
+        this.round = round;
+        this.home_name = home_name;
+        this.away_name = away_name;
+        this.location = location;
+        this.league_id = league_id;
+        this.home_id = home_id;
+        this.away_id = away_id;
+        this.group_id = group_id;
+        this.match_id = match_id;
+    }
+
     public Fixtures() {
     }
 

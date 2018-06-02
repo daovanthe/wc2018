@@ -2,9 +2,11 @@ package th.wc2018.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.ListView;
 
+import data.raw.Fixtures;
 import th.wc2018.R;
 import th.wc2018.adapter.MatchAdapter;
 
@@ -21,17 +23,29 @@ public class MatchesActivity extends Activity {
         allMatches = (ListView) findViewById(R.id.all_matches);
 
         matchesData = loadData();
-        MatchAdapter matchesAdapter = new MatchAdapter(getBaseContext(), 0, matchesData);
+        MatchAdapter matchesAdapter = new MatchAdapter(getBaseContext(), R.layout.date_match_layout, matchesData);
         allMatches.setAdapter(matchesAdapter);
 
 
     }
 
     private Object[] loadData() {
-
-
-
-        return new Object[0];
+        Object[] obj = new Object[2];
+        obj[0] = new String("Match 1");
+        Fixtures fixtures = new Fixtures("856735",
+                "2018-06-14",
+                "18:00:00",
+                "GS",
+                "Russia",
+                "Saudi Arabia",
+                "Luzhniki Stadium, Moscow",
+                "793",
+                "12",
+                "75",
+                "1",
+                "112");
+        obj[1] = fixtures;
+        return obj;
     }
 
 

@@ -14,7 +14,7 @@ public class ImageConvert {
 
     public static HashMap<String, Integer> hashFlag = new HashMap<String, Integer>();
 
-    {
+    static {
         hashFlag.put("74", R.drawable.egypt);
         hashFlag.put("81", R.drawable.morocco);
         hashFlag.put("108", R.drawable.nigeria);
@@ -52,6 +52,6 @@ public class ImageConvert {
 
 
     public static int convertString(int country_id) {
-        return hashFlag.get(country_id);
+        return hashFlag.get(country_id + "");
     }
 }

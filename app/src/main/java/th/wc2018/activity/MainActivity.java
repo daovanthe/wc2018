@@ -8,6 +8,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 
 import data.obtain.LoadData;
@@ -25,7 +26,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_matches_layout);
 
-
+        Intent intent = new Intent(this, MatchesActivity.class);
+        startActivity(intent);
 
     }
 
@@ -65,6 +67,7 @@ public class MainActivity extends Activity {
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
+            Log.d("THE_DV", "Connected Service loadData");
             WcService.LocalBinder binder = (WcService.LocalBinder) service;
             mservice = binder.getService();
             LoadData loadData = new LoadData(MainActivity.this, "wcdata");

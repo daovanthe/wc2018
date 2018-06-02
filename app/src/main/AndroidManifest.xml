@@ -20,6 +20,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.MatchesActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/match_activity_name" >
+        </activity>
         <service
             android:name=".WcService"  >
         </service>

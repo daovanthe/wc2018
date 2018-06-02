@@ -65,7 +65,8 @@ public class WcService extends Service {
             @Override
             public void loadApiCompleted(Object... result) {
                 Fixtures[] fixturesData = (Fixtures[]) result;
-                mLoadData.getFixturesDao().insert(fixturesData);
+                if (mLoadData != null)
+                    mLoadData.getFixturesDao().insert(fixturesData);
             }
         });
 
@@ -85,7 +86,8 @@ public class WcService extends Service {
             @Override
             public void loadApiCompleted(Object... result) {
                 Score[] scoreData = (Score[]) result;
-                mLoadData.getScoreDao().insert(scoreData);
+                if (mLoadData != null)
+                    mLoadData.getScoreDao().insert(scoreData);
             }
         });
 

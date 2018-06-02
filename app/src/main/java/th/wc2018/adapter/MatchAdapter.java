@@ -28,24 +28,24 @@ public class MatchAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View view, ViewGroup convertView) {
 
-        View v = convertView;
+        View viewGroup = view;
         Object objectItem = getItem(position);
 
         if (objectItem != null) {
             if (objectItem instanceof String) {
                 DateMatchViewHolder holder;
-                if (v == null) {
+                if (viewGroup == null) {
                     LayoutInflater vi;
                     vi = LayoutInflater.from(getContext());
-                    v = vi.inflate(R.layout.date_match_layout, null);
+                    viewGroup = vi.inflate(R.layout.date_match_layout, null);
                     holder = new DateMatchViewHolder();
                     // map data
-                    TextView lDateTextView = (TextView) v.findViewById(R.id.date_match);
+                    TextView lDateTextView = (TextView) viewGroup.findViewById(R.id.date_match);
                     holder.dateTextView = lDateTextView;
-                    v.setTag(holder);
+                    viewGroup.setTag(holder);
 
                 } else {
-                    holder = (DateMatchViewHolder) v.getTag();
+                    holder = (DateMatchViewHolder) viewGroup.getTag();
                 }
                 // set data on View
                 holder.dateTextView.setText((String) objectItem);
@@ -53,32 +53,32 @@ public class MatchAdapter extends ArrayAdapter {
             } else if (objectItem instanceof Fixtures) {
                 Fixtures match = (Fixtures) objectItem;
                 SingleMatchViewHolder holder;
-                if (v == null) {
+                if (viewGroup == null) {
                     LayoutInflater vi;
                     vi = LayoutInflater.from(getContext());
-                    v = vi.inflate(R.layout.match_item_layout, null);
+                    viewGroup = vi.inflate(R.layout.match_item_layout, null);
                     holder = new SingleMatchViewHolder();
                     // map data
-                    ImageView homePicture = (ImageView) v.findViewById(R.id.home_pic);
-                    ImageView awayPicture = (ImageView) v.findViewById(R.id.away_pic);
+                    ImageView homePicture = (ImageView) viewGroup.findViewById(R.id.home_pic);
+                    ImageView awayPicture = (ImageView) viewGroup.findViewById(R.id.away_pic);
 
-                    TextView homeName = (TextView) v.findViewById(R.id.home_name);
-                    TextView awayName = (TextView) v.findViewById(R.id.away_name);
-                    TextView matchGroup = (TextView) v.findViewById(R.id.match_group);
-                    TextView matchId = (TextView) v.findViewById(R.id.match_id);
-                    TextView matchTime = (TextView) v.findViewById(R.id.match_time);
+                    TextView homeName = (TextView) viewGroup.findViewById(R.id.home_name);
+                    TextView awayName = (TextView) viewGroup.findViewById(R.id.away_name);
+                    TextView matchGroup = (TextView) viewGroup.findViewById(R.id.match_group);
+                    TextView matchId = (TextView) viewGroup.findViewById(R.id.match_id);
+                    TextView matchTime = (TextView) viewGroup.findViewById(R.id.match_time);
 
                     holder.homePic = homePicture;
-                    holder.awayPic = homePicture;
+                    holder.awayPic = awayPicture;
                     holder.homeName = homeName;
                     holder.awayName = awayName;
                     holder.matchGroup = matchGroup;
                     holder.matchId = matchId;
                     holder.matchTime = matchTime;
-                    v.setTag(holder);
+                    viewGroup.setTag(holder);
 
                 } else {
-                    holder = (SingleMatchViewHolder) v.getTag();
+                    holder = (SingleMatchViewHolder) viewGroup.getTag();
                 }
                 // set data on View
                 holder.homePic.setImageResource(ImageConvert.convertString(Integer.valueOf(match.getHome_id())));
@@ -91,7 +91,7 @@ public class MatchAdapter extends ArrayAdapter {
             }
 
         }
-        return v;
+        return viewGroup;
     }
 
     class DateMatchViewHolder {

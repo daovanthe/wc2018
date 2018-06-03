@@ -20,6 +20,10 @@ android {
     lintOptions {
         abortOnError false
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -37,6 +41,7 @@ dependencies {
 //    implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.google.firebase:firebase-firestore:17.0.1'
   // compile 'com.google.firebase:firebase-admin:6.1.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
 
     /// dataa
     def room_version = "1.1.0" // or, for latest rc, use "1.1.1-rc1"

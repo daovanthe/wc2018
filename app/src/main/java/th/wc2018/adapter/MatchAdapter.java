@@ -1,6 +1,7 @@
 package th.wc2018.adapter;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import java.util.List;
 public class MatchAdapter extends ArrayAdapter {
 
 
-    public MatchAdapter(Context context, int resource, Object[] items) {
+    public MatchAdapter(Context context, int resource, List<Object> items) {
         super(context, resource, items);
     }
 
@@ -32,66 +33,119 @@ public class MatchAdapter extends ArrayAdapter {
         Object objectItem = getItem(position);
 
         if (objectItem != null) {
-            if (objectItem instanceof String) {
-                DateMatchViewHolder holder;
-                if (viewGroup == null) {
-                    LayoutInflater vi;
-                    vi = LayoutInflater.from(getContext());
-                    viewGroup = vi.inflate(R.layout.date_match_layout, null);
-                    holder = new DateMatchViewHolder();
-                    // map data
-                    TextView lDateTextView = (TextView) viewGroup.findViewById(R.id.date_match);
-                    holder.dateTextView = lDateTextView;
-                    viewGroup.setTag(holder);
+//            if (objectItem instanceof String) {
+            DateMatchViewHolder holder1;
+            SingleMatchViewHolder holder2;
+            if (viewGroup == null) {
+                LayoutInflater vi;
+                vi = LayoutInflater.from(getContext());
+                View viewDate = vi.inflate(R.layout.date_match_layout, null);
+                holder1 = new DateMatchViewHolder();
+                // map data
+                TextView lDateTextView = (TextView) viewDate.findViewById(R.id.date_match);
+                holder1.dateTextView = lDateTextView;
 
-                } else {
-                    holder = (DateMatchViewHolder) viewGroup.getTag();
+
+                View viewMatches = vi.inflate(R.layout.match_item_layout, null);
+                holder2 = new SingleMatchViewHolder();
+                ImageView homePicture = (ImageView) viewMatches.findViewById(R.id.home_pic);
+                ImageView awayPicture = (ImageView) viewMatches.findViewById(R.id.away_pic);
+
+                TextView homeName = (TextView) viewMatches.findViewById(R.id.home_name);
+                TextView awayName = (TextView) viewMatches.findViewById(R.id.away_name);
+                TextView matchGroup = (TextView) viewMatches.findViewById(R.id.match_group);
+                TextView matchId = (TextView) viewMatches.findViewById(R.id.match_id);
+                TextView matchTime = (TextView) viewMatches.findViewById(R.id.match_time);
+                holder2.homePic = homePicture;
+                holder2.awayPic = awayPicture;
+                holder2.homeName = homeName;
+                holder2.awayName = awayName;
+                holder2.matchGroup = matchGroup;
+                holder2.matchId = matchId;
+                holder2.matchTime = matchTime;
+
+                if (objectItem instanceof String) {
+                    viewGroup = viewDate;
+                } else { // (objectItem instanceof Fixtures)
+                    viewGroup = viewMatches;
                 }
-                // set data on View
-                holder.dateTextView.setText((String) objectItem);
+                viewGroup.setTag(R.string.FIRST_TAG, holder1);
+                viewGroup.setTag(R.string.SECOND_TAG, holder2);
+            } else {
+                holder1 = (DateMatchViewHolder) viewGroup.getTag(R.string.FIRST_TAG);
+                holder2 = (SingleMatchViewHolder) viewGroup.getTag(R.string.SECOND_TAG);
 
-            } else if (objectItem instanceof Fixtures) {
-                Fixtures match = (Fixtures) objectItem;
-                SingleMatchViewHolder holder;
-                if (viewGroup == null) {
-                    LayoutInflater vi;
-                    vi = LayoutInflater.from(getContext());
-                    viewGroup = vi.inflate(R.layout.match_item_layout, null);
-                    holder = new SingleMatchViewHolder();
-                    // map data
-                    ImageView homePicture = (ImageView) viewGroup.findViewById(R.id.home_pic);
-                    ImageView awayPicture = (ImageView) viewGroup.findViewById(R.id.away_pic);
-
-                    TextView homeName = (TextView) viewGroup.findViewById(R.id.home_name);
-                    TextView awayName = (TextView) viewGroup.findViewById(R.id.away_name);
-                    TextView matchGroup = (TextView) viewGroup.findViewById(R.id.match_group);
-                    TextView matchId = (TextView) viewGroup.findViewById(R.id.match_id);
-                    TextView matchTime = (TextView) viewGroup.findViewById(R.id.match_time);
-
-                    holder.homePic = homePicture;
-                    holder.awayPic = awayPicture;
-                    holder.homeName = homeName;
-                    holder.awayName = awayName;
-                    holder.matchGroup = matchGroup;
-                    holder.matchId = matchId;
-                    holder.matchTime = matchTime;
-                    viewGroup.setTag(holder);
-
-                } else {
-                    holder = (SingleMatchViewHolder) viewGroup.getTag();
+                if (objectItem instanceof String) {
+                    holder1.dateTextView.setText(objectItem.toString());
+                } else { // (objectItem instanceof Fixtures)
+                    Fixtures match = (Fixtures) objectItem;
+                    holder2.homePic.setImageResource(ImageConvert.convertString(match.getHome_name()));
+                    holder2.awayPic.setImageResource(ImageConvert.convertString(match.getAway_name()));
+                    holder2.homeName.setText(match.getHome_name());
+                    holder2.awayName.setText(match.getAway_name());
+                    holder2.matchGroup.setText(match.getGroup_id());
+                    holder2.matchId.setText(match.getMatch_id());
+                    holder2.matchTime.setText(match.getTime());
                 }
-                // set data on View
-                holder.homePic.setImageResource(ImageConvert.convertString(Integer.valueOf(match.getHome_id())));
-                holder.awayPic.setImageResource(ImageConvert.convertString(Integer.valueOf(match.getAway_id())));
-                holder.homeName.setText(match.getHome_name());
-                holder.awayName.setText(match.getAway_name());
-                holder.matchGroup.setText(match.getGroup_id());
-                holder.matchId.setText(match.getMatch_id());
-                holder.matchTime.setText(match.getTime());
             }
-
         }
         return viewGroup;
+//
+//                viewGroup.setTag(R.string.FIRST_TAG, holder1);
+//                viewGroup.setTag(R.string.SECOND_TAG, holder2);
+//
+//            } else {
+//                holder1 = (DateMatchViewHolder) viewGroup.getTag(R.string.FIRST_TAG);
+//            }
+//
+//            holder1.dateTextView.setText(objectItem.toString());
+//
+//        } else if (objectItem instanceof Fixtures) {
+//            Fixtures match = (Fixtures) objectItem;
+//            SingleMatchViewHolder holder2;
+//            DateMatchViewHolder holder1;
+//            if (viewGroup == null) {
+//                LayoutInflater vi;
+//                vi = LayoutInflater.from(getContext());
+//                viewGroup = vi.inflate(R.layout.match_item_layout, null);
+//                holder2 = new SingleMatchViewHolder();
+//                holder1 = new DateMatchViewHolder();
+//                // map data
+//                ImageView homePicture = (ImageView) viewGroup.findViewById(R.id.home_pic);
+//                ImageView awayPicture = (ImageView) viewGroup.findViewById(R.id.away_pic);
+//
+//                TextView homeName = (TextView) viewGroup.findViewById(R.id.home_name);
+//                TextView awayName = (TextView) viewGroup.findViewById(R.id.away_name);
+//                TextView matchGroup = (TextView) viewGroup.findViewById(R.id.match_group);
+//                TextView matchId = (TextView) viewGroup.findViewById(R.id.match_id);
+//                TextView matchTime = (TextView) viewGroup.findViewById(R.id.match_time);
+//
+//                holder2.homePic = homePicture;
+//                holder2.awayPic = awayPicture;
+//                holder2.homeName = homeName;
+//                holder2.awayName = awayName;
+//                holder2.matchGroup = matchGroup;
+//                holder2.matchId = matchId;
+//                holder2.matchTime = matchTime;
+//                viewGroup.setTag(R.string.FIRST_TAG, holder1);
+//                viewGroup.setTag(R.string.SECOND_TAG, holder2);
+//
+//            } else {
+//                holder2 = (SingleMatchViewHolder) viewGroup.getTag(R.string.SECOND_TAG);
+//            }
+//            // set data on View
+//            holder2.homePic.setImageResource(ImageConvert.convertString(match.getHome_name()));
+//            holder2.awayPic.setImageResource(ImageConvert.convertString(match.getAway_name()));
+//            holder2.homeName.setText(match.getHome_name());
+//            holder2.awayName.setText(match.getAway_name());
+//            holder2.matchGroup.setText(match.getGroup_id());
+//            holder2.matchId.setText(match.getMatch_id());
+//            holder2.matchTime.setText(match.getTime());
+//        }
+//
+//
+//    }
+//        return viewGroup;
     }
 
     class DateMatchViewHolder {

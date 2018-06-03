@@ -22,4 +22,10 @@ public interface FixturesDao  {
     @Query("SELECT * FROM fixtures WHERE id = :fixtureId ")
     public List<Fixtures> getFixturesById(String fixtureId);
 
+    @Query("SELECT distinct date FROM fixtures Order by date")
+    public List<String> getDay();
+
+    @Query("SELECT * FROM fixtures WHERE date = :date ")
+    public List<Fixtures> getMatchByDay(String date);
+
 }

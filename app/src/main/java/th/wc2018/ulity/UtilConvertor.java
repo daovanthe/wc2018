@@ -10,10 +10,10 @@ import java.util.HashMap;
 
 import th.wc2018.R;
 
-public class ImageConvert {
+public class UtilConvertor {
 
     public static HashMap<String, Integer> hashFlag = new HashMap<String, Integer>();
-
+    public static HashMap<String, String> hashGroup = new HashMap<String, String>();
     static {
         hashFlag.put("Egypt", R.drawable.egypt);
         hashFlag.put("Morroco", R.drawable.morocco);
@@ -47,11 +47,27 @@ public class ImageConvert {
         hashFlag.put("Colombia", R.drawable.colombia);
         hashFlag.put("Peru", R.drawable.peru);
         hashFlag.put("Uruguay", R.drawable.uruguay);
-
     }
 
+    static {
+        hashGroup.put("793", "Group A");
+        hashGroup.put("794", "Group B");
+        hashGroup.put("795", "Group C");
+        hashGroup.put("796", "Group D");
+        hashGroup.put("797", "Group E");
+        hashGroup.put("798", "Group F");
+        hashGroup.put("799", "Group G");
+        hashGroup.put("800", "Group H");
 
-    public static int convertString(String country_id) {
+    }
+    public static String convertLeadeToGroup(String country_id) {
+
+        if (hashGroup.get(country_id) == null) {
+            return "Group W";
+        }
+        return hashGroup.get(country_id);
+    }
+    public static int convertFlagCountry(String country_id) {
 
         if (hashFlag.get(country_id) == null) {
             return 0;

@@ -2,6 +2,7 @@ package data.raw;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -61,6 +62,7 @@ public class Fixtures {
         this.match_id = match_id;
     }
 
+
     public Fixtures(@NonNull String id, String date, String time, String round, String home_name, String away_name, String location, String league_id, String home_id, String away_id, String group_id, String match_id) {
         this.id = id;
         this.date = date;
@@ -75,6 +77,7 @@ public class Fixtures {
         this.group_id = group_id;
         this.match_id = match_id;
     }
+
 
     public Fixtures() {
     }
@@ -158,6 +161,21 @@ public class Fixtures {
 
     public void setAway_id(String away_id) {
         this.away_id = away_id;
+    }
+
+    public Fixtures clone() {
+        Fixtures clone = new Fixtures();
+        clone.setId(getId());
+        clone.setDate(getDate());
+        clone.setTime(getTime());
+        clone.setRound(getRound());
+        clone.setHome_name(getHome_name());
+        clone.setAway_name(getAway_name());
+        clone.setLocation(getLocation());
+        clone.setLeague_id(getLeague_id());
+        clone.setHome_id(getHome_id());
+        clone.setAway_id(getAway_id());
+        return clone;
     }
 
     @Override

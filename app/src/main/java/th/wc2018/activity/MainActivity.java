@@ -6,6 +6,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import th.wc2018.R;
+import th.wc2018.activity.fragment.MatchesFragment;
 
 
 public class MainActivity extends AppCompatActivity
@@ -93,8 +96,15 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_live_score) {
             // Handle the camera action
         } else if (id == R.id.nav_matches) {
+            Intent matches = new Intent(this, MatchesActivity.class);
+            startActivity(matches);
 
         } else if (id == R.id.nav_group_score) {
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            MatchesFragment fragment = new MatchesFragment();
+//            fragmentTransaction.add(R.id.frag_holder, fragment);
+//            fragmentTransaction.commit();
 
         } else if (id == R.id.nav_share) {
 

@@ -12,13 +12,13 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import data.obtain.LoadData;
 import data.raw.Fixtures;
-import data.raw.Leagues;
 import data.raw.Score;
 import th.wc2018.api.API;
 import th.wc2018.api.OnLoadApiCompletedListener;
 import th.wc2018.api.apiImp.FixturesAPI;
 import th.wc2018.api.apiImp.LeaguesApi;
 import th.wc2018.api.apiImp.ScoreApi;
+import th.wc2018.service.ILoadDataApiListener;
 
 public class WcService extends Service {
 
@@ -31,6 +31,10 @@ public class WcService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+    }
+
+    public void runServiceTask() {
         Log.d(TAG, "service WC created");
         //  Write a message to the database
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -82,14 +86,14 @@ public class WcService extends Service {
 
 
         scoreApi = new ScoreApi();
-        scoreApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
-            @Override
-            public void loadApiCompleted(Object... result) {
-                Score[] scoreData = (Score[]) result;
-                if (mLoadData != null)
-                    mLoadData.getScoreDao().insert(scoreData);
-            }
-        });
+//        scoreApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
+//            @Override
+//            public void loadApiCompleted(Object... result) {
+//                Score[] scoreData = (Score[]) result;
+//                if (mLoadData != null)
+//                    mLoadData.getScoreDao().insert(scoreData);
+//            }
+//        });
 
 
         runTask();
@@ -105,6 +109,12 @@ public class WcService extends Service {
                         count++;
                         Log.d(TAG, "get API automatically");
                         getObjectApi();
+
+
+                        // notify to Load data OK!
+                        if (mILoadDataApiListener != null) {
+                            mILoadDataApiListener.loadDone();
+                        }
                         Thread.sleep(1800000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -154,6 +164,12 @@ public class WcService extends Service {
     }
 
     private final IBinder binder = new LocalBinder();
+
+    private ILoadDataApiListener mILoadDataApiListener;
+
+    public void onLoadDataOK(ILoadDataApiListener loadDataApiListener) {
+        mILoadDataApiListener = loadDataApiListener;
+    }
 
     public class LocalBinder extends Binder {
         public WcService getService() {

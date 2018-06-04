@@ -43,17 +43,21 @@ public class ScoreApi extends API {
     private void loadApiToObject(String command) {
         String data = getJsonString(command);
         //TO-DO
-//        String json = ClientBuilder.newClient().target(command).request().accept(MediaType.APPLICATION_JSON).get(String.class);
-        JsonParser parser = new JsonParser();
-        JsonObject obj = parser.parse(data).getAsJsonObject();
-        JsonArray subArgs = obj.get("data").getAsJsonObject()
-                .get("match").getAsJsonArray();
-
+//  String json = ClientBuilder.newClient().target(command).request().accept(MediaType.APPLICATION_JSON).get(String.class);
 //        String jsonArrayFixtures = subArgs.getAsString();
-        Score[] fixtures = gson.fromJson(subArgs.toString(), Score[].class);
-        // add to database
-        if (mOnLoadApiComletedListener != null) {
-            mOnLoadApiComletedListener.loadApiCompleted(fixtures);
+        try {
+            JsonParser parser = new JsonParser();
+            JsonObject obj = parser.parse(data).getAsJsonObject();
+            JsonArray subArgs = obj.get("data").getAsJsonObject()
+                    .get("match").getAsJsonArray();
+
+            Score[] fixtures = gson.fromJson(subArgs.toString(), Score[].class);
+            // add to database
+            if (mOnLoadApiComletedListener != null) {
+                mOnLoadApiComletedListener.loadApiCompleted(fixtures);
+            }
+        } catch (Exception e) {
+
         }
     }
 

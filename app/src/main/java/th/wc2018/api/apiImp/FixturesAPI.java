@@ -40,23 +40,26 @@ public class FixturesAPI extends API {
     }
 
 
-
     private Gson gson = new Gson();
 
     private void loadApiToObject(String command) {
         String data = getJsonString(command);
         //TO-DO
 //        String json = ClientBuilder.newClient().target(command).request().accept(MediaType.APPLICATION_JSON).get(String.class);
-        JsonParser parser = new JsonParser();
-        JsonObject obj = parser.parse(data).getAsJsonObject();
-        JsonArray subArgs = obj.get("data").getAsJsonObject()
-                .get("fixtures").getAsJsonArray();
+        try {
+            JsonParser parser = new JsonParser();
+            JsonObject obj = parser.parse(data).getAsJsonObject();
+            JsonArray subArgs = obj.get("data").getAsJsonObject()
+                    .get("fixtures").getAsJsonArray();
 
 //        String jsonArrayFixtures = subArgs.getAsString();
-        Fixtures[] fixtures = gson.fromJson(subArgs.toString(), Fixtures[].class);
-        // add to database
-        if (mOnLoadApiComletedListener != null) {
-            mOnLoadApiComletedListener.loadApiCompleted(fixtures);
+            Fixtures[] fixtures = gson.fromJson(subArgs.toString(), Fixtures[].class);
+            // add to database
+            if (mOnLoadApiComletedListener != null) {
+                mOnLoadApiComletedListener.loadApiCompleted(fixtures);
+            }
+        } catch (Exception e) {
+
         }
     }
 }

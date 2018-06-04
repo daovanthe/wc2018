@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -28,60 +29,61 @@ import th.wc2018.adapter.MatchAdapter;
 public class MatchesActivity extends Activity {
 
     private ListView allMatches;
-    private List<Object> matchesData = new ArrayList<>();
+    private List<Object> matchesData;
     private MatchAdapter matchesAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_matches_layout);
+        Log.d("THE_DV", "MatchesActivity on created () ;");
         allMatches = (ListView) findViewById(R.id.all_matches);
+        matchesData = new ArrayList<>();
         matchesAdapter = new MatchAdapter(getBaseContext(), R.layout.date_match_layout, matchesData);
-
-        new Thread(() -> {
-            loadData(matchesData);
-        }).start();
-
         allMatches.setAdapter(matchesAdapter);
-
-
+        new LoadDataFromSQLTask().execute(matchesData);
     }
 
-    private void loadData(List<Object> allmatchesInfo) {
-        //
-        LoadData loadData = new LoadData(this, "wcdata");
 
-        List<String> days = loadData.getFixturesDao().getDay();
-        for (String day : days) {
-            allmatchesInfo.add(day);
-            List<Fixtures> listMatchesPerDay = loadData.getFixturesDao().getMatchByDay(day);
-            boolean hasMatch = false;
-            for (Fixtures singleMatch : listMatchesPerDay) {
-                String time = singleMatch.getTime();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
-                Date date1 = null;
-                try {
-                    date1 = dateFormat.parse(day + " " + time);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+    class LoadDataFromSQLTask extends AsyncTask<List<Object>, Void, Void> {
+        @Override
+        protected Void doInBackground(List<Object>... allmatchesInfos) {
+            List<Object> allmatchesInfo = allmatchesInfos[0];
+            LoadData loadData = new LoadData(MatchesActivity.this, "wcdata");
+            List<String> days = loadData.getFixturesDao().getDay();
+            for (String day : days) {
+                allmatchesInfo.add(day);
+                List<Fixtures> listMatchesPerDay = loadData.getFixturesDao().getMatchByDay(day);
+                boolean hasMatch = false;
+                for (Fixtures singleMatch : listMatchesPerDay) {
+                    String time = singleMatch.getTime();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
+                    Date date1 = null;
+                    try {
+                        date1 = dateFormat.parse(day + " " + time);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    Date currentTime = Calendar.getInstance().getTime();
+                    if (date1.after(currentTime)) {
+                        allmatchesInfo.add(singleMatch);
+                        hasMatch = true;
+                    }
                 }
-
-                Date currentTime = Calendar.getInstance().getTime();
-                if (date1.after(currentTime)) {
-                    runOnUiThread(() -> {
-                        matchesAdapter.notifyDataSetChanged();
-                    });
-                    allmatchesInfo.add(singleMatch);
-                    hasMatch = true;
+                if (!hasMatch) {
+                    allmatchesInfo.remove(day);
                 }
             }
-            if (!hasMatch) {
-                allmatchesInfo.remove(day);
-                runOnUiThread(() -> {
-                    matchesAdapter.notifyDataSetChanged();
-                });
-            }
+            loadData.closeConnect();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            matchesAdapter.notifyDataSetChanged();
         }
     }
 
@@ -92,7 +94,7 @@ public class MatchesActivity extends Activity {
         Intent serviceIntent = new Intent();
         serviceIntent.setPackage("th.wc2018");
         serviceIntent.setClass(this, WcService.class);
-        bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
+//        bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
         //startService(serviceIntent);
 
     }

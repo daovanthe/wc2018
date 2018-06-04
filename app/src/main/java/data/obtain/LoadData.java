@@ -25,6 +25,10 @@ public class LoadData {
         leaguesDao = db.getLeaguesDao();
         fixturesDao = db.getFixtureDao();
     }
+    public void closeConnect() {
+         db.close();
+    }
+
 
 
     public FixturesDao getFixturesDao() {

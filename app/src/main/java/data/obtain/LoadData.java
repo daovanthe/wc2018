@@ -16,19 +16,20 @@ public class LoadData {
     private ScoreDao scoreDao;
 
 
-
-
-     public LoadData(Context pContext, String nameDatabase) {
+    public LoadData(Context pContext, String nameDatabase) {
         db = Room.databaseBuilder(pContext,
                 AppDatabase.class, nameDatabase).build();
+
+
         scoreDao = db.getScoreDao();
         leaguesDao = db.getLeaguesDao();
         fixturesDao = db.getFixtureDao();
     }
-    public void closeConnect() {
-         db.close();
-    }
 
+
+    public void closeConnect() {
+        db.close();
+    }
 
 
     public FixturesDao getFixturesDao() {

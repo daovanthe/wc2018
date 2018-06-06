@@ -75,7 +75,18 @@ public class MatchAdapter extends BaseAdapter {
         view_item_layout.removeAllViews();
         if (object instanceof String) {
             TextView lDateTextView = (TextView) holder1.view.findViewById(R.id.date_match);
-            lDateTextView.setText(object.toString());
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
+            Date time = null;
+            try {
+                time = dateFormat.parse(object.toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            String timeConverted = new SimpleDateFormat("dd/MM").format(time);
+            lDateTextView.setText(timeConverted);
+
 
             view_item_layout.addView(holder1.view);
         } else if (object instanceof Fixtures) {

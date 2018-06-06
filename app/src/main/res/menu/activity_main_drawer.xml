@@ -6,15 +6,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_live_score"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_live_score"
             android:title="Live Scores" />
         <item
             android:id="@+id/nav_matches"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_menu_matches"
             android:title="Matches" />
         <item
             android:id="@+id/nav_group_score"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_group_score"
             android:title="Group Score" />
     </group>
 

@@ -12,15 +12,15 @@
         android:orientation="vertical"
         android:paddingLeft="8dp">
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/date_match"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:text="@string/date_match"
+            android:text="2018"
             android:textColor="@android:color/background_light"
-            android:textSize="24dp"
-            app:fontFamily="@font/allerta" />
+            android:textSize="18sp"
+            app:fontFamily="@font/amiko_semibold" />
 
     </LinearLayout>
 

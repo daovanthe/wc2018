@@ -1,12 +1,33 @@
 package th.wc2018.activity.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
+
+import data.obtain.LoadData;
+import data.raw.Fixtures;
 import th.wc2018.R;
+import th.wc2018.adapter.MatchAdapter;
+import th.wc2018.broadcast.MAction;
 
 public class MatchesFragment extends Fragment {
 
@@ -15,5 +36,152 @@ public class MatchesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_matches_layout, container, false);
+    }
+
+    private ListView allMatchesListView;
+    private List<Object> matchesData;
+    private ConcurrentLinkedQueue data;
+    private MatchAdapter matchesAdapter;
+
+    public void refreshData() {
+        LoadDataFromSQLTask task = new LoadDataFromSQLTask();
+        task.execute(matchesData);
+        try {
+            List<Object> objects = task.get();
+
+//            synchronized (matchesData) {
+//                Iterator<Object> iter = matchesData.iterator();
+//                while (iter.hasNext()) {
+//                    Object o = iter.next();
+//                    matchesData.remove(o);
+//                }
+//                for (Object o : objects) {
+//                    matchesData.add(o);
+//                }
+            matchesAdapter.notifyDataSetChanged();
+//            }
+
+        } catch (
+                InterruptedException e) {
+            e.printStackTrace();
+        } catch (
+                ExecutionException e)
+
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+    class LoadDataFromSQLTask extends AsyncTask<List<Object>, Void, List<Object>> {
+        @Override
+        protected List<Object> doInBackground(List<Object>... allmatchesInfos) {
+            List<Object> allmatchesInfo = allmatchesInfos[0];// new ArrayList<>();
+            allmatchesInfo.removeAll(allmatchesInfo);
+            LoadData loadData = null;
+            try {
+                loadData = new LoadData(getActivity(), "wcdata");
+            } catch (IllegalArgumentException w) {
+                w.printStackTrace();
+            }
+            List<String> days = loadData.getFixturesDao().getDay();
+            for (String day : days) {
+                allmatchesInfo.add(day.toString());
+                List<Fixtures> listMatchesPerDay = loadData.getFixturesDao().getMatchByDay(day);
+                boolean hasMatch = false;
+                for (Fixtures singleMatch : listMatchesPerDay) {
+                    String time = singleMatch.getTime();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
+                    Date date1 = null;
+                    try {
+                        date1 = dateFormat.parse(day + " " + time);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    Date currentTime = Calendar.getInstance().getTime();
+                    if (date1.after(currentTime)) {
+                        allmatchesInfo.add(singleMatch);
+                        hasMatch = true;
+                    }
+                }
+                if (!hasMatch) {
+                    allmatchesInfo.remove(day);
+                }
+            }
+            onProgressUpdate();
+            loadData.closeConnect();
+            return allmatchesInfo;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    matchesAdapter.notifyDataSetChanged();
+                }
+            });
+        }
+
+        @Override
+        protected void onPostExecute(List<Object> list) {
+            super.onPostExecute(list);
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    matchesAdapter.notifyDataSetChanged();
+                }
+            });
+        }
+
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //startService(serviceIntent);
+        Log.d("THE_DV", "MatchesActivity on created () ;");
+        allMatchesListView = (ListView) getView().findViewById(R.id.all_matches);
+
+//        matchesData = new ArrayList<>();
+        matchesData = new ArrayList<>();
+        LoadDataFromSQLTask task = new LoadDataFromSQLTask();
+        task.execute(matchesData);
+
+        try {
+            matchesData = task.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        matchesAdapter = new MatchAdapter(getActivity(), matchesData);
+        allMatchesListView.setAdapter(matchesAdapter);
+
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(MAction.DATABASE_CHANGE);
+        getActivity().registerReceiver(mDataBaseChangeListener, intentFilter);
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().unregisterReceiver(mDataBaseChangeListener);
+    }
+
+    private DataBaseChangeListener mDataBaseChangeListener = new DataBaseChangeListener();
+
+    class DataBaseChangeListener extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(MAction.DATABASE_CHANGE))
+                getActivity().runOnUiThread(() -> {
+                    refreshData();
+                });
+        }
     }
 }

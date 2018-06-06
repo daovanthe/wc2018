@@ -1,8 +1,11 @@
 package th.wc2018;
 
 import android.app.Service;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -18,6 +21,7 @@ import th.wc2018.api.OnLoadApiCompletedListener;
 import th.wc2018.api.apiImp.FixturesAPI;
 import th.wc2018.api.apiImp.LeaguesApi;
 import th.wc2018.api.apiImp.ScoreApi;
+import th.wc2018.broadcast.MAction;
 import th.wc2018.service.ILoadDataApiListener;
 
 public class WcService extends Service {
@@ -27,15 +31,25 @@ public class WcService extends Service {
     private API fixturesApi, leagueApi, scoreApi;
 
     private Object o = new Object();
+    private Runnable mRunnable;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        runServiceTask();
+    }
 
+    private Context mContext;
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        mLoadData = new LoadData(getApplicationContext(), "wcdata");
+        ;//super.onStartCommand(intent, flags, startId);
+        return Service.START_NOT_STICKY;
     }
 
     public void runServiceTask() {
-        Log.d(TAG, "service WC created");
+        Log.e(TAG, "service WC created");
         //  Write a message to the database
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
@@ -71,6 +85,10 @@ public class WcService extends Service {
                 Fixtures[] fixturesData = (Fixtures[]) result;
                 if (mLoadData != null)
                     mLoadData.getFixturesDao().insert(fixturesData);
+
+                Intent intent = new Intent();
+                intent.setAction(MAction.DATABASE_CHANGE);
+                sendBroadcast(intent);
             }
         });
 
@@ -107,14 +125,9 @@ public class WcService extends Service {
                 while (true) {
                     try {
                         count++;
-                        Log.d(TAG, "get API automatically");
+                        Log.e(TAG, "get API automatically");
                         getObjectApi();
 
-
-                        // notify to Load data OK!
-                        if (mILoadDataApiListener != null) {
-                            mILoadDataApiListener.loadDone();
-                        }
                         Thread.sleep(1800000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -124,43 +137,84 @@ public class WcService extends Service {
         }.start();
     }
 
+
+    private byte count = 0;
+
     public void getObjectApi() {
-        Log.d(TAG, "WcService -> getObjectApi()");
+        Log.e(TAG, "WcService -> getObjectApi()");
+        Object lock = new Object();
+
+        count = 0;
         new Thread() {
             public void run() {
                 fixturesApi.getObject();
+                count++;
+                if (count == 3) {
+                    synchronized (lock) {
+                        lock.notify();
+                    }
+                }
             }
         }.start();
 
         new Thread() {
             public void run() {
                 scoreApi.getObject();
+
+                count++;
+                if (count == 3) {
+                    synchronized (lock) {
+                        lock.notify();
+                    }
+                }
             }
         }.start();
 
         new Thread() {
             public void run() {
                 leagueApi.getObject();
+                count++;
+                if (count == 3) {
+                    synchronized (lock) {
+                        lock.notify();
+                    }
+                }
             }
         }.start();
+
+        synchronized (lock) {
+            try {
+                lock.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        //  // notify to Load data OK!
+        if (mILoadDataApiListener != null) {
+            mILoadDataApiListener.loadDone();
+        }
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "service WC Destroyed");
+        Log.e(TAG, "service WC Destroyed");
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return Service.START_NOT_STICKY;
-    }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return binder;
+    }
+
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        Log.e("THE_DV", "UNBIND SERVICE ");
+        return super.onUnbind(intent);
+
     }
 
     private final IBinder binder = new LocalBinder();
@@ -177,10 +231,6 @@ public class WcService extends Service {
         }
     }
 
+    private LoadData mLoadData;// = new LoadData(getApplicationContext(), "wcdata");
 
-    private LoadData mLoadData;
-
-    public void startLoadData(LoadData loadData) {
-        mLoadData = loadData;
-    }
 }

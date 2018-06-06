@@ -21,17 +21,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.MatchesActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/match_activity_name"></activity>
 
         <service android:name=".WcService"/>
        <!-- <receiver
             android:name=".broadcast.DataBaseChangeListener"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.DATABASE_CHANGE" />
+                <action android:name="android.intent.action.FIXTURES_DATABASE_CHANGE" />
             </intent-filter>
         </receiver>-->
         <meta-data

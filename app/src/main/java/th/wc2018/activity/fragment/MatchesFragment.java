@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -29,13 +29,47 @@ import th.wc2018.R;
 import th.wc2018.adapter.MatchAdapter;
 import th.wc2018.broadcast.MAction;
 
-public class MatchesFragment extends Fragment {
+public class MatchesFragment extends CommonFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_matches_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment_matches_layout, container, false);
+
+
+        Log.d("THE_DV", "MatchesActivity on created () ;");
+        allMatchesListView = (ListView) view.findViewById(R.id.all_matches);
+
+        allMatchesListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mGestureDetector.onTouchEvent(motionEvent);
+                return false;
+            }
+        });
+//        matchesData = new ArrayList<>();
+        matchesData = new ArrayList<>();
+        LoadDataFromSQLTask task = new LoadDataFromSQLTask();
+        task.execute(matchesData);
+
+        try {
+            matchesData = task.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        matchesAdapter = new MatchAdapter(getActivity(), matchesData);
+        allMatchesListView.setAdapter(matchesAdapter);
+
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(MAction.FIXTURES_DATABASE_CHANGE);
+        getActivity().registerReceiver(mDataBaseChangeListener, intentFilter);
+
+        return view;
     }
 
     private ListView allMatchesListView;
@@ -142,28 +176,7 @@ public class MatchesFragment extends Fragment {
     public void onStart() {
         super.onStart();
         //startService(serviceIntent);
-        Log.d("THE_DV", "MatchesActivity on created () ;");
-        allMatchesListView = (ListView) getView().findViewById(R.id.all_matches);
 
-//        matchesData = new ArrayList<>();
-        matchesData = new ArrayList<>();
-        LoadDataFromSQLTask task = new LoadDataFromSQLTask();
-        task.execute(matchesData);
-
-        try {
-            matchesData = task.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        matchesAdapter = new MatchAdapter(getActivity(), matchesData);
-        allMatchesListView.setAdapter(matchesAdapter);
-
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(MAction.DATABASE_CHANGE);
-        getActivity().registerReceiver(mDataBaseChangeListener, intentFilter);
     }
 
 
@@ -178,7 +191,7 @@ public class MatchesFragment extends Fragment {
     class DataBaseChangeListener extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(MAction.DATABASE_CHANGE))
+            if (intent.getAction().equals(MAction.FIXTURES_DATABASE_CHANGE))
                 getActivity().runOnUiThread(() -> {
                     refreshData();
                 });

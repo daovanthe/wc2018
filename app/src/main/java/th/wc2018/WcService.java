@@ -1,11 +1,9 @@
 package th.wc2018;
 
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -83,12 +81,28 @@ public class WcService extends Service {
             @Override
             public void loadApiCompleted(Object... result) {
                 Fixtures[] fixturesData = (Fixtures[]) result;
-                if (mLoadData != null)
+                if (mLoadData != null) {
                     mLoadData.getFixturesDao().insert(fixturesData);
+                    Intent intent = new Intent();
+                    intent.setAction(MAction.FIXTURES_DATABASE_CHANGE);
+                    sendBroadcast(intent);
+                }
+            }
+        });
 
-                Intent intent = new Intent();
-                intent.setAction(MAction.DATABASE_CHANGE);
-                sendBroadcast(intent);
+
+        scoreApi = new ScoreApi();
+        scoreApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
+            @Override
+            public void loadApiCompleted(Object... result) {
+                Score[] scoreData = (Score[]) result;
+                if (mLoadData != null) {
+                    mLoadData.getScoreDao().insert(scoreData);
+                    Log.e("THE_DV", "mLoadData SCORE OK ");
+                    Intent intent = new Intent();
+                    intent.setAction(MAction.LIVESCORE_DATABASE_CHANGE);
+                    sendBroadcast(intent);
+                }
             }
         });
 
@@ -99,17 +113,6 @@ public class WcService extends Service {
 //            public void loadApiCompleted(Object... result) {
 //                Leagues[] LeguesData = (Leagues[]) result;
 //                mLoadData.getLeaguesDao().insert(LeguesData);
-//            }
-//        });
-
-
-        scoreApi = new ScoreApi();
-//        scoreApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
-//            @Override
-//            public void loadApiCompleted(Object... result) {
-//                Score[] scoreData = (Score[]) result;
-//                if (mLoadData != null)
-//                    mLoadData.getScoreDao().insert(scoreData);
 //            }
 //        });
 

@@ -1,11 +1,7 @@
 package th.wc2018.activity;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 
 import android.support.v4.app.FragmentManager;
@@ -19,12 +15,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import data.obtain.LoadData;
 import th.wc2018.R;
 import th.wc2018.WcService;
+import th.wc2018.activity.fragment.CommonFragment;
+import th.wc2018.activity.fragment.GroupScoreFragment;
 import th.wc2018.activity.fragment.LiveScoreFragment;
 import th.wc2018.activity.fragment.MatchesFragment;
-import th.wc2018.service.ILoadDataApiListener;
 
 
 public class MainActivity extends AppCompatActivity
@@ -49,9 +45,8 @@ public class MainActivity extends AppCompatActivity
 
 
         // for testing
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frag_holder, matchesFragment);
-        fragmentTransaction.commit();
+
+        initFragment();
 
         Intent serviceIntent = new Intent();
         serviceIntent.setPackage("th.wc2018");
@@ -60,6 +55,61 @@ public class MainActivity extends AppCompatActivity
 
 //        this.bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
         startService(serviceIntent);
+    }
+
+    private void initFragment() {
+        fragmentManager = getSupportFragmentManager();
+
+        liveScoreFragment = new LiveScoreFragment();
+        matchesFragment = new MatchesFragment();
+        groupScoreFragment = new GroupScoreFragment();
+
+        liveScoreFragment.setISwipeListener(new CommonFragment.ISwipeListener() {
+            @Override
+            public void swipeTo(byte direction) {
+                if (direction == CommonFragment.SWIPE_LEFT) {
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_to_enter_from_right, R.anim.slide_to_left);
+                    fragmentTransaction.replace(R.id.frag_holder, matchesFragment);
+                    fragmentTransaction.commit();
+                }
+            }
+        });
+
+        matchesFragment.setISwipeListener(new CommonFragment.ISwipeListener() {
+            @Override
+            public void swipeTo(byte direction) {
+                if (direction == CommonFragment.SWIPE_LEFT) {
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_to_enter_from_right, R.anim.slide_to_left);
+                    fragmentTransaction.replace(R.id.frag_holder, groupScoreFragment);
+                    fragmentTransaction.commit();
+                } else if (direction == CommonFragment.SWIPE_RIGHT) {
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_to_enter_from_left, R.anim.slide_to_right);
+                    fragmentTransaction.replace(R.id.frag_holder, liveScoreFragment);
+                    fragmentTransaction.commit();
+                }
+            }
+        });
+
+
+        groupScoreFragment.setISwipeListener(new CommonFragment.ISwipeListener() {
+            @Override
+            public void swipeTo(byte direction) {
+                if (direction == CommonFragment.SWIPE_RIGHT) {
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_to_enter_from_left, R.anim.slide_to_right);
+                    fragmentTransaction.replace(R.id.frag_holder, matchesFragment);
+                    fragmentTransaction.commit();
+                }
+            }
+        });
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.frag_holder, matchesFragment);
+        fragmentTransaction.commit();
+
     }
 
 
@@ -91,17 +141,17 @@ public class MainActivity extends AppCompatActivity
 //        if (id == R.id.action_settings) {
 //            return true;
 //        }
-
         return super.onOptionsItemSelected(item);
     }
 
 
     // matchesFragment
 
-    FragmentManager fragmentManager = getSupportFragmentManager();
+    FragmentManager fragmentManager;
 
-    MatchesFragment matchesFragment = new MatchesFragment();
-    LiveScoreFragment scoreFragment = new LiveScoreFragment();
+    LiveScoreFragment liveScoreFragment;
+    MatchesFragment matchesFragment;
+    GroupScoreFragment groupScoreFragment;
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -111,15 +161,16 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_live_score) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.frag_holder, scoreFragment);
+            fragmentTransaction.replace(R.id.frag_holder, liveScoreFragment);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_matches) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.frag_holder, matchesFragment);
             fragmentTransaction.commit();
-
         } else if (id == R.id.nav_group_score) {
-
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.frag_holder, groupScoreFragment);
+            fragmentTransaction.commit();
 
         } else if (id == R.id.nav_share) {
 

@@ -53,10 +53,18 @@ public class Score {
     private String home_id;
 
     @ColumnInfo(name = "away_id")
-    private String awayId;
+    private String away_id;
 
     @ColumnInfo(name = "events")
     private String events;
+
+    public String getAway_id() {
+        return away_id;
+    }
+
+    public void setAway_id(String away_id) {
+        this.away_id = away_id;
+    }
 
     public Score() {
     }
@@ -174,13 +182,6 @@ public class Score {
         this.home_id = home_id;
     }
 
-    public String getAwayId() {
-        return awayId;
-    }
-
-    public void setAwayId(String awayId) {
-        this.awayId = awayId;
-    }
 
     public String getEvents() {
         return events;
@@ -207,7 +208,7 @@ public class Score {
                 ", last_changed='" + last_changed + '\'' +
                 ", status='" + status + '\'' +
                 ", home_id='" + home_id + '\'' +
-                ", awayId='" + awayId + '\'' +
+                ", awayId='" + away_id + '\'' +
                 ", events='" + events + '\'' +
                 '}';
     }

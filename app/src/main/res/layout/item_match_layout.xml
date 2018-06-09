@@ -2,102 +2,152 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingBottom="4dp"
-    android:paddingLeft="12dp"
-    android:paddingRight="0dp"
-    android:paddingTop="4dp">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="8dp"
-        android:paddingRight="4dp">
-
-        <ImageView
-            android:id="@+id/home_pic"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_weight="0.03"
-            android:contentDescription="flag"
-            android:elevation="4dp"
-            android:translationZ="4dp"
-            app:srcCompat="@mipmap/ic_launcher" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/home_name"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:paddingLeft="4dp"
-            android:text="Phan Rang thao cham"
-            android:textColor="@android:color/background_light"
-            android:textSize="14sp"
-            app:fontFamily="@font/amiko_semibold" />
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:gravity="top|center_vertical"
-            android:orientation="vertical">
+            android:gravity="center_vertical">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/match_group"
+            <LinearLayout
+                android:id="@+id/left_side"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="10dp"
-                android:gravity="center_horizontal"
-                android:text="Group A"
-                android:textColor="@android:color/background_light"
-                android:textSize="12sp"
-                app:fontFamily="@font/audiowide" />
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/match_id"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.03">
+
+                    <ImageView
+                        android:id="@+id/home_pic"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_centerVertical="true"
+                        android:layout_weight="0.03"
+                        android:contentDescription="flag"
+                        android:elevation="4dp"
+                        android:translationZ="4dp"
+                        app:srcCompat="@mipmap/ic_launcher" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/home_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/home_pic"
+                        android:layout_weight="0.1"
+                        android:paddingLeft="4dp"
+                        android:text="Ha Noi"
+                        android:textColor="@android:color/background_light"
+                        android:textSize="14sp"
+                        app:fontFamily="@font/amiko_semibold" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/center_side"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Match 1"
-                android:textColor="@android:color/background_light"
-                android:textSize="12sp"
-                app:fontFamily="@font/aldrich" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/match_time"
+                android:layout_weight="3.5"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:gravity="top|center_vertical"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/match_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:elevation="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="Group A"
+                        android:textColor="@android:color/background_light"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/audiowide" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/match_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="Match 1"
+                        android:textColor="@android:color/background_light"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/aldrich" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/match_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="22:00"
+                        android:textColor="@android:color/background_light"
+                        android:textSize="18sp"
+                        app:fontFamily="@font/aldrich" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/right_side"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="22:00"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                app:fontFamily="@font/aldrich" />
+                android:layout_weight="3"
+                android:orientation="vertical">
 
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/away_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/away_pic"
+                        android:layout_weight="0.1"
+                        android:gravity="right"
+                        android:paddingRight="4dp"
+
+                        android:text="Viet Nam"
+                        android:textColor="@android:color/background_light"
+                        android:textSize="14sp"
+                        app:fontFamily="@font/amiko_semibold" />
+
+                    <ImageView
+                        android:id="@+id/away_pic"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_weight="0.03"
+                        android:elevation="4dp"
+                        android:translationZ="4dp"
+                        app:srcCompat="@mipmap/ic_launcher" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
         </LinearLayout>
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/away_name"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:gravity="right"
-            android:paddingRight="4dp"
-            android:text="Viet Nam"
-            android:textColor="@android:color/background_light"
-            android:textSize="14sp"
-            app:fontFamily="@font/amiko_semibold" />
-
-        <ImageView
-            android:id="@+id/away_pic"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_weight="0.03"
-            android:elevation="4dp"
-            android:translationZ="4dp"
-            app:srcCompat="@mipmap/ic_launcher" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

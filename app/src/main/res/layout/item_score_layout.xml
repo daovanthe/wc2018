@@ -17,6 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
             android:gravity="bottom"
             android:orientation="vertical">
 
@@ -31,7 +33,7 @@
                     android:padding="2dp">
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/header"
+                        android:id="@+id/header_live_score"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
@@ -47,6 +49,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:paddingBottom="8dp"
@@ -55,7 +59,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:gravity="center_vertical">
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/update_on_txt"
@@ -63,35 +68,41 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="false"
+                        android:layout_centerVertical="true"
                         android:layout_weight="1"
                         android:text="Update on:"
                         android:textColor="@android:color/background_light"
-                        android:textSize="14sp"
-                        app:fontFamily="@font/abel" />
+                        android:textSize="12sp"
+                        app:fontFamily="@font/aldrich" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/date_update_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
+                        android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/update_on_txt"
                         android:layout_weight="1"
                         android:paddingLeft="4dp"
                         android:text="2018-06-15"
                         android:textColor="@android:color/background_light"
-                        android:textSize="14sp"
-                        app:fontFamily="@font/abel" />
+                        android:textSize="12sp"
+                        app:fontFamily="@font/aldrich" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/status_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/date_update_txt"
-
+                        android:gravity="right"
                         android:paddingLeft="4dp"
                         android:text="IN PLAY"
-                        android:textColor="@android:color/background_light" />
+                        android:textColor="@android:color/background_light"
+                        android:textSize="14sp"
+                        app:fontFamily="@font/aldrich" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -99,6 +110,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -112,8 +125,8 @@
 
                     <ImageView
                         android:id="@+id/home_img"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
                         app:srcCompat="@drawable/russia" />
 
                     <android.support.v7.widget.AppCompatTextView
@@ -124,14 +137,14 @@
                         android:paddingTop="8dp"
                         android:text="Russia"
                         android:textColor="@android:color/background_light"
-                        android:textSize="12sp"
+                        android:textSize="18sp"
                         app:fontFamily="@font/amiko_semibold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.4"
+                    android:layout_weight="0.35"
                     android:orientation="vertical"
                     android:paddingTop="8dp">
 
@@ -146,35 +159,95 @@
                         android:textSize="24sp"
                         app:fontFamily="@font/aldrich" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/half_time"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingTop="4dp"
-                        android:text="half time: 0-0"
-                        android:textColor="@android:color/background_light"
-                        android:textSize="12sp" />
+                        android:layout_height="wrap_content">
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/full_time"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingTop="4dp"
-                        android:text="full time: 0-0"
-                        android:textColor="@android:color/background_light"
-                        android:textSize="12sp" />
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/half_time_header"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="@string/half_time_header"
+                            android:textColor="@android:color/background_light"
+                            android:textSize="10sp"
+                            app:fontFamily="@font/allerta" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/ex_time"
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/half_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/half_time_header"
+
+                            android:gravity="right|center"
+                            android:text="0-0"
+                            android:textColor="@android:color/background_light"
+                            android:textSize="10sp"
+                            app:fontFamily="@font/allerta" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingTop="4dp"
-                        android:text="ex time: 0-0"
-                        android:textColor="@android:color/background_light"
-                        android:textSize="12sp" />
+                        android:layout_height="wrap_content">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/full_time_header"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="@string/full_time_header"
+                            android:textColor="@android:color/background_light"
+                            android:textSize="10sp"
+                            app:fontFamily="@font/allerta" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/full_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_toRightOf="@id/full_time_header"
+                            android:gravity="right|center"
+                            android:text="0-0"
+                            android:textColor="@android:color/background_light"
+                            android:textSize="10sp"
+                            app:fontFamily="@font/allerta" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/ex_time_header"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/extra_time_header"
+                            android:textColor="@android:color/background_light"
+                            android:textSize="10sp"
+
+                            app:fontFamily="@font/allerta" />
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/ex_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_toRightOf="@id/ex_time_header"
+                            android:gravity="right|center"
+                            android:text="0-0"
+                            android:textColor="@android:color/background_light"
+                            android:textSize="10sp"
+                            app:fontFamily="@font/allerta" />
+
+                    </RelativeLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -187,8 +260,8 @@
 
                     <ImageView
                         android:id="@+id/away_img"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
                         app:srcCompat="@drawable/brazil" />
 
                     <android.support.v7.widget.AppCompatTextView
@@ -199,7 +272,7 @@
                         android:paddingTop="8dp"
                         android:text="Brazil"
                         android:textColor="@android:color/background_light"
-                        android:textSize="12sp"
+                        android:textSize="18sp"
                         app:fontFamily="@font/amiko_semibold" />
                 </LinearLayout>
             </LinearLayout>

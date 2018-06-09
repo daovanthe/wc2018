@@ -35,7 +35,7 @@ public class LiveScoreAdapter extends ArrayAdapter {
 
     class ViewHolder {
         ImageView homeImg, awayImg, refreshIcon;
-        TextView homeName, awayName, updateTime, allTime, halfTime, fullTime, exTime;
+        TextView homeName, awayName, updateTime, allTime, halfTime, fullTime, exTime, header_live_score, status_txt;
         RelativeLayout eventList;
     }
 
@@ -54,6 +54,8 @@ public class LiveScoreAdapter extends ArrayAdapter {
         }
 
         ViewHolder holder = new ViewHolder();
+        holder.header_live_score = (TextView) v.findViewById(R.id.header_live_score);
+
         holder.homeImg = (ImageView) v.findViewById(R.id.home_img);
         holder.awayImg = (ImageView) v.findViewById(R.id.away_img);
 
@@ -61,6 +63,7 @@ public class LiveScoreAdapter extends ArrayAdapter {
         holder.awayName = (TextView) v.findViewById(R.id.away_name_txt);
 
         holder.updateTime = (TextView) v.findViewById(R.id.date_update_txt);
+        holder.status_txt = (TextView)  v.findViewById(R.id.status_txt);
 
         holder.allTime = (TextView) v.findViewById(R.id.all_time_txt);
         holder.halfTime = (TextView) v.findViewById(R.id.half_time);
@@ -68,11 +71,13 @@ public class LiveScoreAdapter extends ArrayAdapter {
         holder.exTime = (TextView) v.findViewById(R.id.ex_time);
         holder.eventList = (RelativeLayout) v.findViewById(R.id.event_list_score);
 
+        holder.header_live_score.setText(liveScore.getLeague_name());
         holder.homeImg.setImageResource(UtilConvertor.convertFlagCountry(liveScore.getHome_name()));
         holder.awayImg.setImageResource(UtilConvertor.convertFlagCountry(liveScore.getAway_name()));
         holder.homeName.setText(liveScore.getHome_name());
         holder.awayName.setText(liveScore.getAway_name());
         holder.updateTime.setText(liveScore.getLast_changed());
+        holder.status_txt.setText(liveScore.getStatus());
         holder.allTime.setText(liveScore.getScore());
         holder.halfTime.setText(liveScore.getHt_score());
         holder.fullTime.setText(liveScore.getFt_score());
@@ -112,7 +117,7 @@ public class LiveScoreAdapter extends ArrayAdapter {
 
         holder.eventList.removeAllViews();
         View tempView = null;
-         int ID_temp = 0;
+        int ID_temp = 0;
         if (liveScore.getListEvents().size() > 0) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) getContext().getResources().getDimension(R.dimen.event_height));
             Events event = liveScore.getListEvents().get(0);

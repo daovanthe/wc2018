@@ -137,34 +137,36 @@ public class MatchesFragment extends CommonFragment implements SwipeRefreshLayou
             } catch (IllegalArgumentException w) {
                 w.printStackTrace();
             }
-            List<String> days = loadData.getFixturesDao().getDay();
-            for (String day : days) {
-                allmatchesInfo.add(day.toString());
-                List<Fixtures> listMatchesPerDay = loadData.getFixturesDao().getMatchByDay(day);
-                boolean hasMatch = false;
-                for (Fixtures singleMatch : listMatchesPerDay) {
-                    String time = singleMatch.getTime();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
-                    Date date1 = null;
-                    try {
-                        date1 = dateFormat.parse(day + " " + time);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+            if (loadData != null) {
+                List<String> days = loadData.getFixturesDao().getDay();
+                for (String day : days) {
+                    allmatchesInfo.add(day.toString());
+                    List<Fixtures> listMatchesPerDay = loadData.getFixturesDao().getMatchByDay(day);
+                    boolean hasMatch = false;
+                    for (Fixtures singleMatch : listMatchesPerDay) {
+                        String time = singleMatch.getTime();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
+                        Date date1 = null;
+                        try {
+                            date1 = dateFormat.parse(day + " " + time);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
 
-                    Date currentTime = Calendar.getInstance().getTime();
-                    if (date1.after(currentTime)) {
-                        allmatchesInfo.add(singleMatch);
-                        hasMatch = true;
+                        Date currentTime = Calendar.getInstance().getTime();
+                        if (date1.after(currentTime)) {
+                            allmatchesInfo.add(singleMatch);
+                            hasMatch = true;
+                        }
+                    }
+                    if (!hasMatch) {
+                        allmatchesInfo.remove(day);
                     }
                 }
-                if (!hasMatch) {
-                    allmatchesInfo.remove(day);
-                }
+                onProgressUpdate();
+                loadData.closeConnect();
             }
-            onProgressUpdate();
-            loadData.closeConnect();
             return allmatchesInfo;
         }
 

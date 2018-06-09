@@ -22,14 +22,21 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".WcService"/>
-       <!-- <receiver
-            android:name=".broadcast.DataBaseChangeListener"
-            android:exported="true">
+        <service android:name=".WcService" />
+        <!-- <receiver
+             android:name=".broadcast.DataBaseChangeListener"
+             android:exported="true">
+             <intent-filter>
+                 <action android:name="android.intent.action.FIXTURES_DATABASE_CHANGE" />
+             </intent-filter>
+         </receiver>-->
+
+        <receiver android:name=".service.WcServicerBroadCastReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.FIXTURES_DATABASE_CHANGE" />
+                <action android:name="android.intent.action.LIVE_SCORE_DATABASE_CHANGE" />
             </intent-filter>
-        </receiver>-->
+        </receiver>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

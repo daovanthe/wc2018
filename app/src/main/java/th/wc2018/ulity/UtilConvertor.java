@@ -1,11 +1,5 @@
 package th.wc2018.ulity;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.widget.ImageView;
-
 import java.util.HashMap;
 
 import th.wc2018.R;
@@ -14,6 +8,8 @@ public class UtilConvertor {
 
     public static HashMap<String, Integer> hashFlag = new HashMap<String, Integer>();
     public static HashMap<String, String> hashGroup = new HashMap<String, String>();
+    public static HashMap<String, Integer> hashEvent = new HashMap<String, Integer>();
+
     static {
         hashFlag.put("Egypt", R.drawable.egypt);
         hashFlag.put("Morroco", R.drawable.morocco);
@@ -60,6 +56,16 @@ public class UtilConvertor {
         hashGroup.put("800", "Group H");
 
     }
+
+    static {
+        hashEvent.put("GOAL", R.drawable.ic_goal);
+        hashEvent.put("GOAL_PENALTY", R.drawable.ic_penalty);
+        hashEvent.put("OWN_GOAL", R.drawable.ic_own_goal);
+        hashEvent.put("YELLOW_CARD", R.drawable.ic_yellow_card);
+        hashEvent.put("RED_CARD", R.drawable.ic_red_card);
+        hashEvent.put("YELLOW_RED_CARD", R.drawable.ic_yellow_red_card);
+    }
+
     public static String convertLeadeToGroup(String country_id) {
 
         if (hashGroup.get(country_id) == null) {
@@ -67,11 +73,19 @@ public class UtilConvertor {
         }
         return hashGroup.get(country_id);
     }
+
     public static int convertFlagCountry(String country_id) {
 
         if (hashFlag.get(country_id) == null) {
             return 0;
         }
         return hashFlag.get(country_id);
+    }
+
+    public static int convertEventStringToImg(String event) {
+        if (hashEvent.get(event) == null) {
+            return R.drawable.ic_own_goal;
+        }
+        return hashEvent.get(event);
     }
 }

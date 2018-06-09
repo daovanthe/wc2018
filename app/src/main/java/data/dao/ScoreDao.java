@@ -7,19 +7,19 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import data.raw.Score;
+import data.raw.LiveScore;
 
 
 @Dao
-public interface ScoreDao   {
+public interface ScoreDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insert(Score... scores);
+    public void insert(LiveScore... liveScores);
 
-    @Query("SELECT * FROM score")
-    public List<Score> getScore();
+    @Query("SELECT * FROM score Order by added desc")
+    public List<LiveScore> getScore();
 
     @Query("SELECT * FROM score WHERE id = :scoreId ")
-    public List<Score> getScoreById(String scoreId);
+    public List<LiveScore> getScoreById(String scoreId);
 
 }

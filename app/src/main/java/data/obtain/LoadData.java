@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 
 import data.dao.AppDatabase;
+import data.dao.EventsDao;
 import data.dao.FixturesDao;
 import data.dao.LeaguesDao;
 import data.dao.ScoreDao;
@@ -14,16 +15,16 @@ public class LoadData {
     private FixturesDao fixturesDao;
     private LeaguesDao leaguesDao;
     private ScoreDao scoreDao;
-
+    private EventsDao eventLiveScoreDao;
 
     public LoadData(Context pContext, String nameDatabase) {
         db = Room.databaseBuilder(pContext,
                 AppDatabase.class, nameDatabase).build();
 
-
         scoreDao = db.getScoreDao();
         leaguesDao = db.getLeaguesDao();
         fixturesDao = db.getFixtureDao();
+        eventLiveScoreDao = db.getEventsDao();
     }
 
 
@@ -40,9 +41,13 @@ public class LoadData {
         return leaguesDao;
     }
 
-
-    public ScoreDao getScoreDao() {
+    public ScoreDao getLiveScoreDao() {
         return scoreDao;
     }
+
+    public EventsDao getEventLiveScoreDao() {
+        return eventLiveScoreDao;
+    }
+
 
 }

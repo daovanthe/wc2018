@@ -48,7 +48,7 @@ public abstract class API {
 
     public abstract void getObject();
 
-    public String getJsonString(String httpLink) {
+    public String getJsonStringFromLinkAPI(String httpLink) {
         URL oracle = null;
         try {
             oracle = new URL(httpLink);

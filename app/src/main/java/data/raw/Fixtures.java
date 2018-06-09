@@ -62,7 +62,7 @@ public class Fixtures {
         this.match_id = match_id;
     }
 
-
+    @Ignore
     public Fixtures(@NonNull String id, String date, String time, String round, String home_name, String away_name, String location, String league_id, String home_id, String away_id, String group_id, String match_id) {
         this.id = id;
         this.date = date;

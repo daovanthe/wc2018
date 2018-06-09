@@ -43,7 +43,7 @@ public class FixturesAPI extends API {
     private Gson gson = new Gson();
 
     private void loadApiToObject(String command) {
-        String data = getJsonString(command);
+        String data = getJsonStringFromLinkAPI(command);
         //TO-DO
 //        String json = ClientBuilder.newClient().target(command).request().accept(MediaType.APPLICATION_JSON).get(String.class);
         try {

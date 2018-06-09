@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,17 +31,23 @@ import th.wc2018.R;
 import th.wc2018.adapter.MatchAdapter;
 import th.wc2018.broadcast.MAction;
 
-public class MatchesFragment extends CommonFragment {
+public class MatchesFragment extends CommonFragment implements SwipeRefreshLayout.OnRefreshListener {
+
+    private android.support.v4.widget.SwipeRefreshLayout mSwipeContent;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_matches_layout, container, false);
-
+        mSwipeContent = (SwipeRefreshLayout) view.findViewById(R.id.match_refresh_content);
+        mSwipeContent.setOnRefreshListener(this);
 
         Log.d("THE_DV", "MatchesActivity on created () ;");
+
         allMatchesListView = (ListView) view.findViewById(R.id.all_matches);
+
 
         allMatchesListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -48,28 +56,39 @@ public class MatchesFragment extends CommonFragment {
                 return false;
             }
         });
-//        matchesData = new ArrayList<>();
+
         matchesData = new ArrayList<>();
         LoadDataFromSQLTask task = new LoadDataFromSQLTask();
         task.execute(matchesData);
-
-        try {
-            matchesData = task.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+//
+//        try {
+//            matchesData = task.get();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
 
         matchesAdapter = new MatchAdapter(getActivity(), matchesData);
         allMatchesListView.setAdapter(matchesAdapter);
 
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(MAction.FIXTURES_DATABASE_CHANGE);
-        getActivity().registerReceiver(mDataBaseChangeListener, intentFilter);
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction(MAction.FIXTURES_DATABASE_CHANGE);
+//        getActivity().registerReceiver(mDataBaseChangeListener, intentFilter);
 
         return view;
+    }
+
+
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                refreshData();
+                mSwipeContent.setRefreshing(false);
+            }
+        }, 5000);
     }
 
     private ListView allMatchesListView;
@@ -183,7 +202,8 @@ public class MatchesFragment extends CommonFragment {
     @Override
     public void onStop() {
         super.onStop();
-        getActivity().unregisterReceiver(mDataBaseChangeListener);
+        Log.e("THE_DV", "MatchesFragment.class -> onStop() -> unregisterReceiver(mDataBaseChangeListener);");
+//        getActivity().unregisterReceiver(mDataBaseChangeListener);
     }
 
     private DataBaseChangeListener mDataBaseChangeListener = new DataBaseChangeListener();
@@ -191,10 +211,10 @@ public class MatchesFragment extends CommonFragment {
     class DataBaseChangeListener extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(MAction.FIXTURES_DATABASE_CHANGE))
-                getActivity().runOnUiThread(() -> {
-                    refreshData();
-                });
+//            if (intent.getAction().equals(MAction.FIXTURES_DATABASE_CHANGE))
+//                getActivity().runOnUiThread(() -> {
+//                    refreshData();
+//                });
         }
     }
 }

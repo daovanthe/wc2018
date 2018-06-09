@@ -12,13 +12,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import data.obtain.LoadData;
+import data.raw.Events;
 import data.raw.Fixtures;
-import data.raw.Score;
+import data.raw.LiveScore;
 import th.wc2018.api.API;
 import th.wc2018.api.OnLoadApiCompletedListener;
 import th.wc2018.api.apiImp.FixturesAPI;
 import th.wc2018.api.apiImp.LeaguesApi;
-import th.wc2018.api.apiImp.ScoreApi;
+import th.wc2018.api.apiImp.LiveScoreApi;
 import th.wc2018.broadcast.MAction;
 import th.wc2018.service.ILoadDataApiListener;
 
@@ -26,8 +27,8 @@ public class WcService extends Service {
 
     public static String TAG = "THE_DV";
 
-    private API fixturesApi, leagueApi, scoreApi;
-
+    private API fixturesApi, leagueApi;
+    private LiveScoreApi liveScoreApi;
     private Object o = new Object();
     private Runnable mRunnable;
 
@@ -65,7 +66,7 @@ public class WcService extends Service {
 //                                DataFireBase city = document.toObject(DataFireBase.class);
 //                                fixturesApi = new FixturesAPI(city.getKey(), city.getSecret(), city.getLegue1());
 //                                leagueApi = new LeaguesApi(city.getKey(), city.getSecret(), city.getLegue1());
-//                                scoreApi = new ScoreApi(city.getKey(), city.getSecret(), city.getLegue1());
+//                                liveScoreApi = new LiveScoreApi(city.getKey(), city.getSecret(), city.getLegue1());
 //                                runTask();
 //                            }
 //
@@ -91,21 +92,32 @@ public class WcService extends Service {
         });
 
 
-        scoreApi = new ScoreApi();
-        scoreApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
+        liveScoreApi = new LiveScoreApi();
+        liveScoreApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
             @Override
             public void loadApiCompleted(Object... result) {
-                Score[] scoreData = (Score[]) result;
+                LiveScore[] liveScoreDatas = (LiveScore[]) result;
                 if (mLoadData != null) {
-                    mLoadData.getScoreDao().insert(scoreData);
+                    mLoadData.getLiveScoreDao().insert(liveScoreDatas);
                     Log.e("THE_DV", "mLoadData SCORE OK ");
                     Intent intent = new Intent();
-                    intent.setAction(MAction.LIVESCORE_DATABASE_CHANGE);
+                    intent.setAction(MAction.REQUEST_DATABASE_CHANGE);
                     sendBroadcast(intent);
                 }
             }
         });
-
+        liveScoreApi.AddLoadLiveScoreEvent(new LiveScoreApi.ILoadLiveScoreEvent() {
+            @Override
+            public void loadEventCompleted(Events[] liveLiveScoreEvent) {
+                if (mLoadData != null) {
+                    mLoadData.getEventLiveScoreDao().insert(liveLiveScoreEvent);
+                    Log.e("THE_DV", "service load Event OK! ");
+                    Intent intent = new Intent();
+                    intent.setAction(MAction.REQUEST_DATABASE_CHANGE);
+                    sendBroadcast(intent);
+                }
+            }
+        });
 
         leagueApi = new LeaguesApi();
 //        leagueApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
@@ -115,10 +127,9 @@ public class WcService extends Service {
 //                mLoadData.getLeaguesDao().insert(LeguesData);
 //            }
 //        });
-
-
         runTask();
     }
+
 
     public void runTask() {
         new Thread() {
@@ -130,7 +141,6 @@ public class WcService extends Service {
                         count++;
                         Log.e(TAG, "get API automatically");
                         getObjectApi();
-
                         Thread.sleep(1800000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -139,7 +149,6 @@ public class WcService extends Service {
             }
         }.start();
     }
-
 
     private byte count = 0;
 
@@ -162,7 +171,7 @@ public class WcService extends Service {
 
         new Thread() {
             public void run() {
-                scoreApi.getObject();
+                liveScoreApi.getObject();
 
                 count++;
                 if (count == 3) {

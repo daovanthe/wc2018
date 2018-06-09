@@ -2,13 +2,29 @@ package data.raw;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity(tableName = "score")
-public class Score {
+public class LiveScore {
 
+    @Ignore
+    private Object object;
+
+    public void setTag(Object tag) {
+        this.object = tag;
+    }
+
+    public Object getTag() {
+        return object;
+    }
+
+    // id of the match
     @PrimaryKey
     @NonNull
     private String id;
@@ -66,7 +82,8 @@ public class Score {
         this.away_id = away_id;
     }
 
-    public Score() {
+    public LiveScore() {
+        listEvents = new ArrayList<>();
     }
 
     @NonNull
@@ -191,9 +208,19 @@ public class Score {
         this.events = events;
     }
 
+    public void addEvent(Events pListEvent) {
+        this.listEvents.add(pListEvent);
+    }
+
+    public List<Events> getListEvents() {
+        return this.listEvents;
+    }
+    @Ignore
+    private List<Events> listEvents;
+
     @Override
     public String toString() {
-        return "Score{" +
+        return "LiveScore{" +
                 "id='" + id + '\'' +
                 ", home_name='" + home_name + '\'' +
                 ", away_name='" + away_name + '\'' +

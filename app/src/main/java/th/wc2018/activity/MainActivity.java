@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frag_holder, matchesFragment);
+        fragmentTransaction.add(R.id.frag_holder, liveScoreFragment);
         fragmentTransaction.commit();
 
     }

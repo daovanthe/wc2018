@@ -22,4 +22,9 @@ public interface ScoreDao {
     @Query("SELECT * FROM score WHERE id = :scoreId ")
     public List<LiveScore> getScoreById(String scoreId);
 
+    @Query("SELECT * FROM score WHERE league_id = :leagueId")
+    public List<LiveScore> getLiveScoreByLeagueId(String leagueId);
+
+
+
 }

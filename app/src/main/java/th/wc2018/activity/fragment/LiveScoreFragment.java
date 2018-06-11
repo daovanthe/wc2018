@@ -52,7 +52,7 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 mGestureDetector.onTouchEvent(motionEvent);
-                return true;
+                return false;
             }
         });
 

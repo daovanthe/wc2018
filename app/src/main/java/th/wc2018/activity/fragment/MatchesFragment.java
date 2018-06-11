@@ -1,5 +1,6 @@
 package th.wc2018.activity.fragment;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -173,21 +174,27 @@ public class MatchesFragment extends CommonFragment implements SwipeRefreshLayou
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-            getActivity().runOnUiThread(new Runnable() {
-                public void run() {
-                    matchesAdapter.notifyDataSetChanged();
-                }
-            });
+            Activity activity = getActivity();
+            if (activity != null) {
+                activity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        matchesAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
         }
 
         @Override
         protected void onPostExecute(List<Object> list) {
             super.onPostExecute(list);
-            getActivity().runOnUiThread(new Runnable() {
-                public void run() {
-                    matchesAdapter.notifyDataSetChanged();
-                }
-            });
+            Activity activity = getActivity();
+            if (activity != null) {
+                activity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        matchesAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
         }
 
     }

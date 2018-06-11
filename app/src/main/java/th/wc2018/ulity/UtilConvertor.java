@@ -1,5 +1,7 @@
 package th.wc2018.ulity;
 
+import com.google.protobuf.Enum;
+
 import java.util.HashMap;
 
 import th.wc2018.R;
@@ -9,6 +11,7 @@ public class UtilConvertor {
     public static HashMap<String, Integer> hashFlag = new HashMap<String, Integer>();
     public static HashMap<String, String> hashGroup = new HashMap<String, String>();
     public static HashMap<String, Integer> hashEvent = new HashMap<String, Integer>();
+    public static HashMap<String, COUNTRY[]> hashGroupCountry = new HashMap<String, COUNTRY[]>();
 
     static {
         hashFlag.put("Egypt", R.drawable.egypt);
@@ -54,7 +57,6 @@ public class UtilConvertor {
         hashGroup.put("798", "Group F");
         hashGroup.put("799", "Group G");
         hashGroup.put("800", "Group H");
-
     }
 
     static {
@@ -65,6 +67,30 @@ public class UtilConvertor {
         hashEvent.put("RED_CARD", R.drawable.ic_red_card);
         hashEvent.put("YELLOW_RED_CARD", R.drawable.ic_yellow_red_card);
     }
+
+    public static enum COUNTRY {
+        RUSSIA, SAUDI_ARABIA, EGYPT, URUGUAY,
+        PORTUGAL, SPAIN, MOROCCO, IR_IRAN,
+        FRANCE, AUSTRALIA, PERU, DENMARK,
+        ARGENTINA, ICELAND, CROATIA, NIGERIA,
+        BRAZIL, SWITZERLAND, COSTA_RICA, SERBIA,
+        GERMANY, MEXICO, SWEDEN, KOREA_REPUBLIC,
+        BELGIUM, PANAMA, TUNISIA, ENGLAND,
+        POLAND, SENEGAL, COLOMBIA, JAPAN
+    }
+
+
+    static {
+        hashGroupCountry.put("793", new COUNTRY[]{COUNTRY.RUSSIA, COUNTRY.SAUDI_ARABIA, COUNTRY.EGYPT, COUNTRY.URUGUAY});
+        hashGroupCountry.put("794", new COUNTRY[]{COUNTRY.PORTUGAL, COUNTRY.SPAIN, COUNTRY.MOROCCO, COUNTRY.IR_IRAN});
+        hashGroupCountry.put("795", new COUNTRY[]{COUNTRY.FRANCE, COUNTRY.AUSTRALIA, COUNTRY.PERU, COUNTRY.DENMARK});
+        hashGroupCountry.put("796", new COUNTRY[]{COUNTRY.ARGENTINA, COUNTRY.ICELAND, COUNTRY.CROATIA, COUNTRY.NIGERIA,});
+        hashGroupCountry.put("797", new COUNTRY[]{COUNTRY.BRAZIL, COUNTRY.SWITZERLAND, COUNTRY.COSTA_RICA, COUNTRY.SERBIA,});
+        hashGroupCountry.put("798", new COUNTRY[]{COUNTRY.GERMANY, COUNTRY.MEXICO, COUNTRY.SWEDEN, COUNTRY.KOREA_REPUBLIC,});
+        hashGroupCountry.put("799", new COUNTRY[]{COUNTRY.BELGIUM, COUNTRY.PANAMA, COUNTRY.TUNISIA, COUNTRY.ENGLAND,});
+        hashGroupCountry.put("800", new COUNTRY[]{COUNTRY.POLAND, COUNTRY.SENEGAL, COUNTRY.COLOMBIA, COUNTRY.JAPAN});
+    }
+
 
     public static String convertLeadeToGroup(String country_id) {
 

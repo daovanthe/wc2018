@@ -116,6 +116,7 @@ public class MatchAdapter extends BaseAdapter {
                 e.printStackTrace();
             }
             view_item_layout.addView(holder2.view);
+                    
         }
         return view_item_layout;
     }

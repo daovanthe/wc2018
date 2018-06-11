@@ -3,13 +3,23 @@ package data.raw;
 public class CountryScore {
 
     String Country;
+
+    public String getCountry() {
+        return Country;
+    }
+
+    public void setCountry(String country) {
+        Country = country;
+    }
+
     String ST, Win, Draw, Lost, BT, BB, HIEU_SO, POINT;
 
     public String getST() {
         return ST;
     }
 
-    public CountryScore(String ST, String win, String draw, String lost, String BT, String BB, String HIEU_SO, String POINT) {
+    public CountryScore(String CountryName, String ST, String win, String draw, String lost, String BT, String BB, String HIEU_SO, String POINT) {
+        this.Country = CountryName;
         this.ST = ST;
         Win = win;
         Draw = draw;

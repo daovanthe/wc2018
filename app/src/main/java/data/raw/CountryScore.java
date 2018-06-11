@@ -5,6 +5,8 @@ public class CountryScore {
     String Country;
     String ST, Win, Draw, Lost, BT, BB, HIEU_SO, POINT;
 
+
+
     public String getST() {
         return ST;
     }

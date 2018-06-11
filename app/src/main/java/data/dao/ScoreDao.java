@@ -7,6 +7,7 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
+import data.raw.GroupScore;
 import data.raw.LiveScore;
 
 
@@ -25,6 +26,5 @@ public interface ScoreDao {
     @Query("SELECT * FROM score WHERE league_id = :leagueId")
     public List<LiveScore> getLiveScoreByLeagueId(String leagueId);
 
-
-
+    public List<GroupScore> getDataGroupCore();
 }

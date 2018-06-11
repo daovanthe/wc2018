@@ -61,7 +61,7 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/match"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_toRightOf="@+id/country_img"
                 android:text="M"
                 android:textColor="@android:color/background_light"

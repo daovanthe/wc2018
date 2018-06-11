@@ -6,9 +6,8 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="event_height">36dp</dimen>
-
     <dimen name="eight">8dp</dimen>
+    <dimen name="twentyfour">24dp</dimen>
     <dimen name="sixteen">16dp</dimen>
-
 
 </resources>

@@ -26,5 +26,5 @@ public interface ScoreDao {
     @Query("SELECT * FROM score WHERE league_id = :leagueId")
     public List<LiveScore> getLiveScoreByLeagueId(String leagueId);
 
-    public List<GroupScore> getDataGroupCore();
+
 }

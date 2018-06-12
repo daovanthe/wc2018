@@ -129,7 +129,6 @@ public class LoadData {
                     away_country_score.setDraw(away_country_score.getDraw() + draw_away);
                     away_country_score.setPOINT(away_country_score.getDraw() + point_away);
                     away_country_score.setHIEU_SO(away_country_score.getHIEU_SO() + hieu_so_away);
-
                 } else {
                     CountryScore away_country_score = new CountryScore(String.valueOf(away_name), String.valueOf(so_tran), String.valueOf(win_away), String.valueOf(draw_away), String.valueOf(lost_away), String.valueOf(ket_qua_away), String.valueOf(ket_qua_home), String.valueOf(hieu_so_away), String.valueOf(point_away));
                     mergeData.put(away_name, away_country_score);
@@ -140,13 +139,18 @@ public class LoadData {
         for (String keyGroup : groups) {
             String[] groups_country = UtilConvertor.hashGroupCountry.get(keyGroup);
             String groupName = UtilConvertor.hashGroup.get(keyGroup);
-
             GroupScore groupScore = new GroupScore(groupName, new ArrayList<>());
-
-
             for (String countryName : groups_country) {
-                CountryScore countryScore = mergeData.get(countryName);
-                groupScore.getCountryScoreList().add(mergeData.get(countryScore));
+                if (mergeData.containsKey(countryName)) {
+                    CountryScore countryScore = mergeData.get(countryName);
+                    groupScore.getCountryScoreList().add(mergeData.get(countryScore));
+                } else {
+                    CountryScore away_country_score = new CountryScore(countryName, String.valueOf(0), String.valueOf(0),
+                            String.valueOf(0), String.valueOf(0),
+                            String.valueOf(0), String.valueOf(0),
+                            String.valueOf(0), String.valueOf(0));
+                    groupScore.getCountryScoreList().add(away_country_score);
+                }
             }
             result.add(groupScore);
         }

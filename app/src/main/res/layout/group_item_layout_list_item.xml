@@ -33,6 +33,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/header_layout_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/group_header"
@@ -193,7 +194,9 @@
         android:id="@+id/detail_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.09">
+        android:layout_below="@+id/header_layout_group"
+        android:layout_weight="0.09"
+        android:background="@android:color/background_light">
 
     </RelativeLayout>
 </RelativeLayout>

@@ -87,7 +87,7 @@ public class GroupScoreAdapter extends ArrayAdapter {
                 country_linear_match.setLayoutParams(param_match);
                 line1.addView(country_linear_match);
 
-                    LinearLayout.LayoutParams matchLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams matchLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     AppCompatTextView match_txt = new AppCompatTextView(getContext());
                     match_txt.setText(currentCountryScore1.getST());
                     match_txt.setLayoutParams(matchLayourParams);
@@ -100,7 +100,7 @@ public class GroupScoreAdapter extends ArrayAdapter {
                 country_linear_win.setLayoutParams(param_win);
                 line1.addView(country_linear_win);
 
-                    LinearLayout.LayoutParams wihLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams wihLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     AppCompatTextView win_txt = new AppCompatTextView(getContext());
                     win_txt.setText(currentCountryScore1.getWin());
                     win_txt.setLayoutParams(wihLayourParams);
@@ -113,7 +113,7 @@ public class GroupScoreAdapter extends ArrayAdapter {
                 country_linear_draw.setLayoutParams(param_draw);
                 line1.addView(country_linear_draw);
 
-                    LinearLayout.LayoutParams drawLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams drawLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     AppCompatTextView draw_txt = new AppCompatTextView(getContext());
                     draw_txt.setText(currentCountryScore1.getDraw());
                     draw_txt.setLayoutParams(drawLayourParams);
@@ -126,7 +126,7 @@ public class GroupScoreAdapter extends ArrayAdapter {
                 country_linear_lose.setLayoutParams(param_lose);
                 line1.addView(country_linear_lose);
 
-                    LinearLayout.LayoutParams loseLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams loseLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     AppCompatTextView lose_txt = new AppCompatTextView(getContext());
                     lose_txt.setText(currentCountryScore1.getLost());
                     lose_txt.setLayoutParams(loseLayourParams);
@@ -139,7 +139,7 @@ public class GroupScoreAdapter extends ArrayAdapter {
                 country_linear_bt.setLayoutParams(param_bt);
                 line1.addView(country_linear_bt);
 
-                    LinearLayout.LayoutParams btLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams btLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     AppCompatTextView bt_txt = new AppCompatTextView(getContext());
                     bt_txt.setText(currentCountryScore1.getBT());
                     bt_txt.setLayoutParams(btLayourParams);
@@ -151,36 +151,36 @@ public class GroupScoreAdapter extends ArrayAdapter {
                 country_linear_bb.setLayoutParams(param_bb);
                 line1.addView(country_linear_bb);
 
-                    LinearLayout.LayoutParams bbLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams bbLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     AppCompatTextView bb_txt = new AppCompatTextView(getContext());
                     bb_txt.setText(currentCountryScore1.getBB());
                     bb_txt.setLayoutParams(bbLayourParams);
-                    country_linear_bt.addView(bb_txt);
+                    country_linear_bb.addView(bb_txt);
 
                 LinearLayout.LayoutParams param_hs = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1f);
                 LinearLayout country_linear_hs = new LinearLayout(getContext());
                 country_linear_hs.setOrientation(LinearLayout.VERTICAL);
                 country_linear_hs.setLayoutParams(param_hs);
-                line1.addView(country_linear_bb);
+                line1.addView(country_linear_hs);
 
-                    LinearLayout.LayoutParams hsLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams hsLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     AppCompatTextView hs_txt = new AppCompatTextView(getContext());
                     hs_txt.setText(currentCountryScore1.getHIEU_SO());
                     hs_txt.setLayoutParams(hsLayourParams);
-                    country_linear_bt.addView(hs_txt);
+                    country_linear_hs.addView(hs_txt);
 
 
                 LinearLayout.LayoutParams param_p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1f);
                 LinearLayout country_linear_p = new LinearLayout(getContext());
                 country_linear_p.setOrientation(LinearLayout.VERTICAL);
                 country_linear_p.setLayoutParams(param_p);
-                line1.addView(country_linear_bb);
+                line1.addView(country_linear_p);
 
-                    LinearLayout.LayoutParams pLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams pLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     AppCompatTextView p_txt = new AppCompatTextView(getContext());
-                    p_txt.setText(currentCountryScore1.getHIEU_SO());
+                    p_txt.setText(currentCountryScore1.getPOINT());
                     p_txt.setLayoutParams(pLayourParams);
-                    country_linear_bt.addView(p_txt);
+                    country_linear_p.addView(p_txt);
             // endregion
             ID_temp = line1.getId();
             relativeLayout.addView(line1);
@@ -209,11 +209,11 @@ public class GroupScoreAdapter extends ArrayAdapter {
             country_linear_image.setLayoutParams(params_image);
             line1.addView(country_linear_image);
 
-            LinearLayout.LayoutParams imageLayourParams = new LinearLayout.LayoutParams((int) getContext().getResources().getDimension(R.dimen.twentyfour), (int) getContext().getResources().getDimension(R.dimen.twentyfour));
-            ImageView image = new ImageView(getContext());
-            image.setImageResource(UtilConvertor.convertFlagCountry(currentCountryScore1.getCountry()));
-            image.setLayoutParams(imageLayourParams);
-            country_linear_image.addView(image);
+                LinearLayout.LayoutParams imageLayourParams = new LinearLayout.LayoutParams((int) getContext().getResources().getDimension(R.dimen.twentyfour), (int) getContext().getResources().getDimension(R.dimen.twentyfour));
+                ImageView image = new ImageView(getContext());
+                image.setImageResource(UtilConvertor.convertFlagCountry(currentCountryScore1.getCountry()));
+                image.setLayoutParams(imageLayourParams);
+                country_linear_image.addView(image);
 
 
             LinearLayout.LayoutParams param_match = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1f);
@@ -222,11 +222,11 @@ public class GroupScoreAdapter extends ArrayAdapter {
             country_linear_match.setLayoutParams(param_match);
             line1.addView(country_linear_match);
 
-            LinearLayout.LayoutParams matchLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            AppCompatTextView match_txt = new AppCompatTextView(getContext());
-            match_txt.setText(currentCountryScore1.getST());
-            match_txt.setLayoutParams(matchLayourParams);
-            country_linear_match.addView(match_txt);
+                LinearLayout.LayoutParams matchLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                AppCompatTextView match_txt = new AppCompatTextView(getContext());
+                match_txt.setText(currentCountryScore1.getST());
+                match_txt.setLayoutParams(matchLayourParams);
+                country_linear_match.addView(match_txt);
 
 
             LinearLayout.LayoutParams param_win = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1f);
@@ -235,11 +235,11 @@ public class GroupScoreAdapter extends ArrayAdapter {
             country_linear_win.setLayoutParams(param_win);
             line1.addView(country_linear_win);
 
-            LinearLayout.LayoutParams wihLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            AppCompatTextView win_txt = new AppCompatTextView(getContext());
-            win_txt.setText(currentCountryScore1.getWin());
-            win_txt.setLayoutParams(wihLayourParams);
-            country_linear_win.addView(win_txt);
+                LinearLayout.LayoutParams wihLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                AppCompatTextView win_txt = new AppCompatTextView(getContext());
+                win_txt.setText(currentCountryScore1.getWin());
+                win_txt.setLayoutParams(wihLayourParams);
+                country_linear_win.addView(win_txt);
 
 
             LinearLayout.LayoutParams param_draw = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1f);
@@ -248,11 +248,11 @@ public class GroupScoreAdapter extends ArrayAdapter {
             country_linear_draw.setLayoutParams(param_draw);
             line1.addView(country_linear_draw);
 
-            LinearLayout.LayoutParams drawLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            AppCompatTextView draw_txt = new AppCompatTextView(getContext());
-            draw_txt.setText(currentCountryScore1.getDraw());
-            draw_txt.setLayoutParams(drawLayourParams);
-            country_linear_draw.addView(draw_txt);
+                LinearLayout.LayoutParams drawLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                AppCompatTextView draw_txt = new AppCompatTextView(getContext());
+                draw_txt.setText(currentCountryScore1.getDraw());
+                draw_txt.setLayoutParams(drawLayourParams);
+                country_linear_draw.addView(draw_txt);
 
 
             LinearLayout.LayoutParams param_lose = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1f);
@@ -261,11 +261,11 @@ public class GroupScoreAdapter extends ArrayAdapter {
             country_linear_lose.setLayoutParams(param_lose);
             line1.addView(country_linear_lose);
 
-            LinearLayout.LayoutParams loseLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            AppCompatTextView lose_txt = new AppCompatTextView(getContext());
-            lose_txt.setText(currentCountryScore1.getLost());
-            lose_txt.setLayoutParams(loseLayourParams);
-            country_linear_lose.addView(lose_txt);
+                LinearLayout.LayoutParams loseLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                AppCompatTextView lose_txt = new AppCompatTextView(getContext());
+                lose_txt.setText(currentCountryScore1.getLost());
+                lose_txt.setLayoutParams(loseLayourParams);
+                country_linear_lose.addView(lose_txt);
 
 
             LinearLayout.LayoutParams param_bt = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1f);
@@ -274,11 +274,11 @@ public class GroupScoreAdapter extends ArrayAdapter {
             country_linear_bt.setLayoutParams(param_bt);
             line1.addView(country_linear_bt);
 
-            LinearLayout.LayoutParams btLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            AppCompatTextView bt_txt = new AppCompatTextView(getContext());
-            bt_txt.setText(currentCountryScore1.getBT());
-            bt_txt.setLayoutParams(btLayourParams);
-            country_linear_bt.addView(bt_txt);
+                LinearLayout.LayoutParams btLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                AppCompatTextView bt_txt = new AppCompatTextView(getContext());
+                bt_txt.setText(currentCountryScore1.getBT());
+                bt_txt.setLayoutParams(btLayourParams);
+                country_linear_bt.addView(bt_txt);
 
             LinearLayout.LayoutParams param_bb = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1f);
             LinearLayout country_linear_bb = new LinearLayout(getContext());
@@ -286,36 +286,36 @@ public class GroupScoreAdapter extends ArrayAdapter {
             country_linear_bb.setLayoutParams(param_bb);
             line1.addView(country_linear_bb);
 
-            LinearLayout.LayoutParams bbLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            AppCompatTextView bb_txt = new AppCompatTextView(getContext());
-            bb_txt.setText(currentCountryScore1.getBB());
-            bb_txt.setLayoutParams(bbLayourParams);
-            country_linear_bt.addView(bb_txt);
+                LinearLayout.LayoutParams bbLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                AppCompatTextView bb_txt = new AppCompatTextView(getContext());
+                bb_txt.setText(currentCountryScore1.getBB());
+                bb_txt.setLayoutParams(bbLayourParams);
+                country_linear_bb.addView(bb_txt);
 
             LinearLayout.LayoutParams param_hs = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1f);
             LinearLayout country_linear_hs = new LinearLayout(getContext());
             country_linear_hs.setOrientation(LinearLayout.VERTICAL);
             country_linear_hs.setLayoutParams(param_hs);
-            line1.addView(country_linear_bb);
+            line1.addView(country_linear_hs);
 
-            LinearLayout.LayoutParams hsLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            AppCompatTextView hs_txt = new AppCompatTextView(getContext());
-            hs_txt.setText(currentCountryScore1.getHIEU_SO());
-            hs_txt.setLayoutParams(hsLayourParams);
-            country_linear_bt.addView(hs_txt);
+                LinearLayout.LayoutParams hsLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                AppCompatTextView hs_txt = new AppCompatTextView(getContext());
+                hs_txt.setText(currentCountryScore1.getHIEU_SO());
+                hs_txt.setLayoutParams(hsLayourParams);
+                country_linear_hs.addView(hs_txt);
 
 
             LinearLayout.LayoutParams param_p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.1f);
             LinearLayout country_linear_p = new LinearLayout(getContext());
             country_linear_p.setOrientation(LinearLayout.VERTICAL);
             country_linear_p.setLayoutParams(param_p);
-            line1.addView(country_linear_bb);
+            line1.addView(country_linear_p);
 
-            LinearLayout.LayoutParams pLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            AppCompatTextView p_txt = new AppCompatTextView(getContext());
-            p_txt.setText(currentCountryScore1.getHIEU_SO());
-            p_txt.setLayoutParams(pLayourParams);
-            country_linear_bt.addView(p_txt);
+                LinearLayout.LayoutParams pLayourParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                AppCompatTextView p_txt = new AppCompatTextView(getContext());
+                p_txt.setText(currentCountryScore1.getPOINT());
+                p_txt.setLayoutParams(pLayourParams);
+                country_linear_p.addView(p_txt);
             // endregion
             ID_temp = line1.getId();
             relativeLayout.addView(line1);

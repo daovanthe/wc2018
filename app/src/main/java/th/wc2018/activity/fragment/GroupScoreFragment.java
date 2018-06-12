@@ -4,30 +4,24 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 import data.obtain.LoadData;
-import data.raw.Events;
 import data.raw.GroupScore;
-import data.raw.LiveScore;
 import th.wc2018.R;
 import th.wc2018.adapter.GroupScoreAdapter;
-import th.wc2018.adapter.LiveScoreEventAdapter;
 
 public class GroupScoreFragment extends CommonFragment {
 
-    private GroupScoreAdapter liveScoreAdapter;
-    private List<GroupScore> listLiveScore = new ArrayList<>();
+    private GroupScoreAdapter groupScoreAdapter;
+    private List<Object> listLiveScore = new ArrayList<>();
 
 
     @Nullable
@@ -43,10 +37,10 @@ public class GroupScoreFragment extends CommonFragment {
         });
 
         ListView groupView = (ListView) view.findViewById(R.id.group_detail);
-        liveScoreAdapter = new GroupScoreAdapter(getContext(), 0, listLiveScore);
-        groupView.setAdapter(liveScoreAdapter);
+        groupScoreAdapter = new GroupScoreAdapter(getContext(), 0, listLiveScore);
+        groupView.setAdapter(groupScoreAdapter);
 
-        LoadDataFromSQLTask task = new LoadDataFromSQLTask();
+        LoadGroupDataFromSQLTask task = new LoadGroupDataFromSQLTask();
         task.execute(listLiveScore);
 
 
@@ -54,59 +48,35 @@ public class GroupScoreFragment extends CommonFragment {
     }
 
 
-    class LoadDataFromSQLTask extends AsyncTask<List<Object>, Object, List<Object>> {
+    class LoadGroupDataFromSQLTask extends AsyncTask<List<Object>, Void, List<Object>> {
         @Override
         protected List<Object> doInBackground(List<Object>... allmatchesInfos) {
-            List<Object> allLiveScoreMatches = allmatchesInfos[0];// new ArrayList<>();
-            allLiveScoreMatches.removeAll(allLiveScoreMatches);
-
+            List<Object> groupDataFromListView = allmatchesInfos[0];// new ArrayList<>();
+            groupDataFromListView.removeAll(groupDataFromListView);
             LoadData loadData = null;
-
             try {
                 loadData = new LoadData(getActivity(), "wcdata");
             } catch (IllegalArgumentException w) {
                 w.printStackTrace();
             }
-
             if (loadData != null) {
-                List<LiveScore> listMatchesPerDay = loadData.getLiveScoreDao().getScore();
-
-                for (LiveScore singleMatch : listMatchesPerDay) {
-
-                    String statusMatch = singleMatch.getStatus();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
-
-                    if (statusMatch.trim().equals("FINISHED") || statusMatch.trim().equals("INSUFFICIENT DATA")) {
-                        continue;
-                    }//
-
-                    List<Events> events = loadData.getEventLiveScoreDao().getEventBy(singleMatch.getLeague_id(), singleMatch.getId());
-                    for (Events e : events) {
-                        singleMatch.addEvent(e);
-                    }
-                    onProgressUpdate(singleMatch);
-                    allLiveScoreMatches.add(singleMatch);
+                List<GroupScore> listGroupFromSqlData = loadData.getGroupScoreData();
+                groupDataFromListView.removeAll(groupDataFromListView);
+                for (GroupScore GroupData : listGroupFromSqlData) {
+                    groupDataFromListView.add(GroupData);
                 }
+                onProgressUpdate();
                 loadData.closeConnect();
             }
-            return allLiveScoreMatches;
+            return groupDataFromListView;
         }
 
         @Override
-        protected void onProgressUpdate(Object... values) {
-            super.onProgressUpdate(values);
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate();
             getActivity().runOnUiThread(() -> {
-                liveScoreAdapter.notifyDataSetChanged();
-
+                groupScoreAdapter.notifyDataSetChanged();
             });
-
-            LiveScore liveScore = (LiveScore) values[0];
-            LiveScoreEventAdapter adapter = (LiveScoreEventAdapter) liveScore.getTag();
-            if (adapter != null)
-                adapter.notifyDataSetChanged();
-
-
         }
 
         @Override

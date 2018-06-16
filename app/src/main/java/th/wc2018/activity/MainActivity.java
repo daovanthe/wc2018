@@ -3,7 +3,6 @@ package th.wc2018.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -28,7 +27,7 @@ import th.wc2018.activity.fragment.MatchesFragment;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LiveScoreFragment.ILoadEmptyFragment {
+        implements NavigationView.OnNavigationItemSelectedListener , HistoryScoreFragment.IActivityCallBack {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,19 +80,14 @@ public class MainActivity extends AppCompatActivity
      */
     private boolean isEmptyLiveScore;
 
-    @Override
-    public void loadEmptyFragment(boolean isEmpty) {
-        isEmptyLiveScore = isEmpty;
-        mPagerAdapter.notifyDataSetChanged();
 
-    }
 
 
     public interface CalendarPageFragmentListener {
         void onSwitchToNextFragment();
     }
 
-    public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter  {
+    public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         int NUM_PAGES = 4;
 
         public ScreenSlidePagerAdapter(FragmentManager fm) {
@@ -121,8 +115,15 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void callBack() {
 
+    }
     private void initFragment() {
+        //
+
+        Log.e("THE_DV", "ini fragment ");
+
         fragmentManager = getSupportFragmentManager();
         liveScoreFragment = new LiveScoreFragment();// ((SwipeRefreshLayout.OnRefreshListener) liveScoreFragment).onRefresh();
         matchesFragment = new MatchesFragment();//((SwipeRefreshLayout.OnRefreshListener) matchesFragment).onRefresh();

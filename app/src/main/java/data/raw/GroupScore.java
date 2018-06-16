@@ -19,12 +19,7 @@ public class GroupScore {
         return countryScoreList;
     }
 
-    public void setCountryScoreList(List<CountryScore> countryScoreList) {
-        this.countryScoreList = countryScoreList;
-    }
-
     public GroupScore(String nameGroup, List<CountryScore> countryScoreList) {
-
         this.nameGroup = nameGroup;
         this.countryScoreList = countryScoreList;
     }

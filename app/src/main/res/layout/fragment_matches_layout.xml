@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/match_refresh_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background">
 
-    <ListView
-        android:id="@+id/all_matches"
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_group_id"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Matches"
+        android:textColor="@android:color/background_light"
+        android:textSize="32sp"
+        app:fontFamily="@font/aldrich" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/match_refresh_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/text_group_id">
+
+        <ListView
+            android:id="@+id/all_matches"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

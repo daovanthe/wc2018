@@ -8,12 +8,13 @@
     <string name="SECOND_TAG">2</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">TH Studio</string>
+    <string name="nav_header_subtitle">tankpocket@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="half_time_header">Half time</string>
     <string name="all_time_header">All time</string>
     <string name="full_time_header">Full time</string>
     <string name="extra_time_header">Extra time</string>
+    <string name="time_match_header">Time</string>
 </resources>

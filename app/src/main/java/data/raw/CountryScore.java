@@ -1,6 +1,8 @@
 package data.raw;
 
-public class CountryScore {
+import android.support.annotation.NonNull;
+
+public class CountryScore implements Comparable<CountryScore> {
 
     String Country;
 
@@ -13,7 +15,6 @@ public class CountryScore {
     }
 
     String ST, Win, Draw, Lost, BT, BB, HIEU_SO, POINT;
-
 
 
     public String getST() {
@@ -90,5 +91,21 @@ public class CountryScore {
 
     public void setPOINT(String POINT) {
         this.POINT = POINT;
+    }
+
+    @Override
+    public int compareTo(@NonNull CountryScore countryScore) {
+        if (Integer.valueOf(this.getPOINT()) > Integer.valueOf(countryScore.getPOINT())) {
+            return -1;
+        } else if (Integer.valueOf(this.getPOINT()) < Integer.valueOf(countryScore.getPOINT())) {
+            return 1;
+        } else {
+            if (Integer.valueOf(this.getHIEU_SO()) > Integer.valueOf(countryScore.getHIEU_SO())) {
+                return -1;
+            } else if (Integer.valueOf(this.getPOINT()) < Integer.valueOf(countryScore.getPOINT())) {
+                return 1;
+            }
+        }
+        return 0;
     }
 }

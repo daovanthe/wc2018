@@ -33,6 +33,7 @@ import th.wc2018.broadcast.MAction;
 public class MatchesFragment extends CommonFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private android.support.v4.widget.SwipeRefreshLayout mSwipeContent;
+    private boolean isLoaded = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,7 +51,10 @@ public class MatchesFragment extends CommonFragment implements SwipeRefreshLayou
         allMatchesListView.setAdapter(matchesAdapter);
         Log.e("THE_DV", "on Create View Matches Fragment ...");
 
-        new MatchesFromSQLTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if (!isLoaded) {
+            mSwipeContent.setRefreshing(true);
+            new MatchesFromSQLTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
         Log.e("THE_DV", "pass task.execute()... isCannel: ");
         return view;
     }
@@ -84,6 +88,13 @@ public class MatchesFragment extends CommonFragment implements SwipeRefreshLayou
     }
 
     class MatchesFromSQLTask extends AsyncTask<Void, Void, List<Object>> {
+
+        @Override
+        protected void onPreExecute() {
+
+            isLoaded = true;
+        }
+
         @Override
         protected List<Object> doInBackground(Void... allmatchesInfos) {
             Log.e("THE_DV", "Executing asyntask of Matches collection");
@@ -129,6 +140,8 @@ public class MatchesFragment extends CommonFragment implements SwipeRefreshLayou
 
         @Override
         protected void onPostExecute(List<Object> list) {
+            isLoaded = false;
+
             if (list.size() != 0) {
                 matchesData.removeAll(matchesData);
                 for (Object o : list) {
@@ -150,8 +163,10 @@ public class MatchesFragment extends CommonFragment implements SwipeRefreshLayou
 
 
     public void refreshData() {
-        MatchesFromSQLTask task = new MatchesFromSQLTask();
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if (!isLoaded) {
+            MatchesFromSQLTask task = new MatchesFromSQLTask();
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
     }
 
 

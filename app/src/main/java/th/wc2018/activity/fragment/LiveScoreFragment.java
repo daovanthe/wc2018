@@ -16,7 +16,6 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import data.obtain.LoadData;
 import data.raw.LiveScore;
 import th.wc2018.R;
 import th.wc2018.adapter.LiveScoreAdapter;
@@ -31,6 +30,8 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
     private SwipeRefreshLayout swipe_content;
     private ListView listScoreView;
 
+    private boolean isLoaded = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,18 +43,27 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
         swipe_content.setOnRefreshListener(this);
         liveScoreAdapter = new LiveScoreAdapter(getActivity(), 0, listLiveScoreData);
         listScoreView.setAdapter(liveScoreAdapter);
-        LoadDataFromSQLTask task = new LoadDataFromSQLTask();
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        // start thread to get live score
+        Log.e("THE_DV", "is loaded: " + isLoaded);
+
+        if (!isLoaded) {
+            swipe_content.setRefreshing(true);
+            LoadDataFromSQLTask task = new LoadDataFromSQLTask();
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(MAction.REQUEST_DATABASE_SCORE_CHANGE);
         return view;
     }
 
     private void refresh() {
-        Log.e("THE_DV", "refreshing to load data .... (started Asyntask)");
-        LoadDataFromSQLTask task = new LoadDataFromSQLTask();
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
+        if (!isLoaded) {
+            Log.e("THE_DV", "refreshing to load data .... (started Asyntask)");
+            LoadDataFromSQLTask task = new LoadDataFromSQLTask();
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
     }
 
     @Override
@@ -62,38 +72,77 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
     }
 
     class LoadDataFromSQLTask extends AsyncTask<Void, LiveScore, List<Object>> {
+
+        @Override
+        protected void onPreExecute() {
+            Log.e("THE_DV", "loaded = true");
+            isLoaded = true;
+        }
+
         @Override
         protected List<Object> doInBackground(Void... allmatchesInfos) {
-            List<Object> listOBject = new ArrayList<>();
+            List<Object> localListLiveScoreData = new ArrayList<>();
+
             LiveScoreApi liveScoreApi = new LiveScoreApi();
             liveScoreApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
                 @Override
                 public void loadApiCompleted(Object... result) {
+                    Log.e("THE_DV", "load live done");
                     LiveScore[] liveScoreDatas = (LiveScore[]) result;
-                    for (LiveScore liveScore : liveScoreDatas)
-                        listOBject.add(liveScore);
+                    for (LiveScore liveScore : liveScoreDatas) {
+                        localListLiveScoreData.add(liveScore);
+                        publishProgress(liveScore);
+                    }
+
                 }
             });
             liveScoreApi.loadObjectFromIntenet();
-            return listOBject;
+            return localListLiveScoreData;
+        }
+
+        @Override
+        protected void onProgressUpdate(LiveScore... l) {
+
+            LiveScore li = l[0];
+            if (li == null) {
+                Log.e("THE_DV", "Live SCORE EROOR on PUBLIC WHEN LOAD FROM INTERNET");
+                return;
+            }
+
+
+            boolean isContain = false;
+            for (Object live : listLiveScoreData) {
+                if (live instanceof LiveScore) {
+                    LiveScore ls = (LiveScore) live;
+                    if (ls.getKey() == li.getKey()) {
+                        listLiveScoreData.remove(ls);
+                        listLiveScoreData.add(li);
+                        isContain = true;
+                        break;
+                    }
+                }
+            }
+            if (!isContain) {
+                listLiveScoreData.add(li);
+            }
+
+
+            liveScoreAdapter.notifyDataSetChanged();
         }
 
         @Override
         protected void onPostExecute(List<Object> list) {
-            if (list.size() != 0) {
-                listLiveScoreData.removeAll(listLiveScoreData);
-                for (Object o : list) {
-                    listLiveScoreData.add(o);
-                }
-                liveScoreAdapter.notifyDataSetChanged();
-                if (swipe_content != null)
-                    swipe_content.setRefreshing(false);
-            } else {
-                Log.e("THE_DV", "refresh if list is 0");
-                ((SwipeRefreshLayout.OnRefreshListener) LiveScoreFragment.this).onRefresh();
-                if (swipe_content != null)
-                    swipe_content.setRefreshing(true);
-            }
+            Log.e("THE_DV", "loaded = false");
+            isLoaded = false;
+//            listLiveScoreData.removeAll(listLiveScoreData);
+//            for (Object o : list) {
+//                listLiveScoreData.add(o);
+//            }
+//            liveScoreAdapter.notifyDataSetChanged();
+
+
+            if (swipe_content != null)
+                swipe_content.setRefreshing(false);
         }
     }
 

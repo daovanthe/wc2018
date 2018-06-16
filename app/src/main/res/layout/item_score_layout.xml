@@ -247,7 +247,24 @@
                             app:fontFamily="@font/allerta" />
 
                     </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/time_match"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_toRightOf="@+id/time_match_header"
+                            android:gravity="center_vertical|center"
+                            android:text="0-0"
+                            android:textColor="@android:color/background_light"
+                            android:textSize="14sp"
+                            app:fontFamily="@font/audiowide" />
+
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <LinearLayout

@@ -55,13 +55,13 @@ public abstract class API {
     protected abstract void getObject();
 
     public void loadObjectFromIntenet() {
-        new Thread(() -> {
+       // new Thread(() -> {
             getObject();
-        }).start();
+      //  }).start();
     }
 
     public String getJsonStringFromLinkAPI(String httpLink) {
-        Log.e("THE_DV", "api load data from internet on background: " + httpLink);
+//        Log.e("THE_DV", "api load data from internet on background: " + httpLink);
         URL oracle = null;
         try {
             oracle = new URL(httpLink);
@@ -90,8 +90,6 @@ public abstract class API {
         }
         String result = bufferReader.toString();
         bufferReader.setLength(0);
-        mOnLoadApiComletedListener.loadApiCompleted(result);
-
         return result;
     }
 
@@ -101,12 +99,5 @@ public abstract class API {
     public void AddOnLoadApiCOmpleteListener(OnLoadApiCompletedListener pOnLoadApiComletedListener) {
         mOnLoadApiComletedListener = pOnLoadApiComletedListener;
     }
-
-    class GetObjectFromInternetThread extends Thread {
-        public void run() {
-            getObject();
-        }
-    }
-
 
 }

@@ -6,8 +6,12 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 
 @Entity(tableName = "score")
@@ -176,7 +180,17 @@ public class LiveScore {
     }
 
     public String getLast_changed() {
-        return last_changed;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
+        String timeConverted = null;
+        try {
+            Date time = dateFormat.parse(last_changed);
+            timeConverted = new SimpleDateFormat("HH:mm:ss").format(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return timeConverted == null ? last_changed : timeConverted;
     }
 
     public void setLast_changed(String last_changed) {
@@ -215,6 +229,7 @@ public class LiveScore {
     public List<Events> getListEvents() {
         return this.listEvents;
     }
+
     @Ignore
     private List<Events> listEvents;
 
@@ -238,5 +253,9 @@ public class LiveScore {
                 ", awayId='" + away_id + '\'' +
                 ", events='" + events + '\'' +
                 '}';
+    }
+
+    public int getKey() {
+        return (getId() + getLeague_id() + getAdded()).hashCode();
     }
 }

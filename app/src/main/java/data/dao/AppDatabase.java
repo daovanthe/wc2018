@@ -5,13 +5,15 @@ import android.arch.persistence.room.RoomDatabase;
 
 import data.raw.Events;
 import data.raw.Fixtures;
+import data.raw.History;
 import data.raw.Leagues;
 import data.raw.LiveScore;
 
-@Database(entities = {Leagues.class, Fixtures.class, LiveScore.class, Events.class}, version = 1)
+@Database(entities = {Leagues.class, Fixtures.class, LiveScore.class, Events.class, History.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase{
     public abstract LeaguesDao getLeaguesDao();
     public abstract FixturesDao getFixtureDao();
     public abstract ScoreDao getScoreDao();
     public abstract EventsDao getEventsDao();
+    public abstract HistoryScoreDao getHistoryDao();
 }

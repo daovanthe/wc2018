@@ -1,5 +1,6 @@
 package th.wc2018.activity.fragment;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ public class GroupScoreFragment extends CommonFragment implements SwipeRefreshLa
     private GroupScoreAdapter groupScoreAdapter;
     private List<Object> listGroupScore = new ArrayList<>();
     private SwipeRefreshLayout mSwipeContent;
+    private boolean isLoaded = false;
 
     @Nullable
     @Override
@@ -44,18 +46,42 @@ public class GroupScoreFragment extends CommonFragment implements SwipeRefreshLa
         ListView groupView = (ListView) view.findViewById(R.id.group_detail);
         groupScoreAdapter = new GroupScoreAdapter(getContext(), 0, listGroupScore);
         groupView.setAdapter(groupScoreAdapter);
-        LoadGroupDataFromSQLTask task = new LoadGroupDataFromSQLTask();
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if (!isLoaded) {
+            mSwipeContent.setRefreshing(true);
+            Log.e("THE_DV", "GROUPING RUNNING");
+            LoadGroupDataFromSQLTask task = new LoadGroupDataFromSQLTask(getActivity());
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
         return view;
+    }
+
+    public void refreshFromActivity(Context context) {
+        if (!isLoaded) {
+            LoadGroupDataFromSQLTask task = new LoadGroupDataFromSQLTask(context);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
     }
 
     @Override
     public void onRefresh() {
-        LoadGroupDataFromSQLTask task = new LoadGroupDataFromSQLTask();
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if (!isLoaded) {
+            LoadGroupDataFromSQLTask task = new LoadGroupDataFromSQLTask(getActivity());
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
     }
 
     class LoadGroupDataFromSQLTask extends AsyncTask<Void, Void, List<Object>> {
+        Context context;
+
+        LoadGroupDataFromSQLTask(Context pContext) {
+            context = pContext;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            isLoaded = true;
+        }
+
         @Override
         protected List<Object> doInBackground(Void... c) {
             Log.e("THE_DV", "Executing asyntask of Groupscore collection");
@@ -63,9 +89,9 @@ public class GroupScoreFragment extends CommonFragment implements SwipeRefreshLa
             groupDataFromListView.removeAll(groupDataFromListView);
             LoadData loadData = null;
             try {
-                loadData = new LoadData(getActivity(), "wcdata");
+                loadData = new LoadData(context, "wcdata");
             } catch (IllegalArgumentException w) {
-                w.printStackTrace();
+                Log.e("THE_DV", w.getMessage());
             }
             if (loadData != null) {
                 List<GroupScore> listGroupFromSqlData = loadData.getGroupScoreData();
@@ -80,6 +106,7 @@ public class GroupScoreFragment extends CommonFragment implements SwipeRefreshLa
 
         @Override
         protected void onPostExecute(List<Object> objects) {
+            isLoaded = true;
             if (objects.size() != 0) {
                 listGroupScore.removeAll(listGroupScore);
                 for (Object o : objects) {

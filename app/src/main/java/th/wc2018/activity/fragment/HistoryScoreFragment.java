@@ -30,6 +30,17 @@ public class HistoryScoreFragment extends CommonFragment implements SwipeRefresh
     private HistoryScoreAdapter historyScoreAdapter;
     private List<Object> listHistoryScore = new ArrayList<>();
     private SwipeRefreshLayout swipe_content;
+    private boolean isLoaded = false;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!isLoaded) {
+            swipe_content.setRefreshing(true);
+            LoadDataFromSQLTask task = new LoadDataFromSQLTask();
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,10 +61,11 @@ public class HistoryScoreFragment extends CommonFragment implements SwipeRefresh
 
         historyScoreAdapter = new HistoryScoreAdapter(getActivity(), 0, listHistoryScore);
         listScoreView.setAdapter(historyScoreAdapter);
-
-        LoadDataFromSQLTask task = new LoadDataFromSQLTask();
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
+        if (!isLoaded) {
+            swipe_content.setRefreshing(true);
+            LoadDataFromSQLTask task = new LoadDataFromSQLTask();
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(MAction.REQUEST_DATABASE_SCORE_CHANGE);
 //        getActivity().registerReceiver(mDataBaseChangeListener, intentFilter);
@@ -62,8 +74,10 @@ public class HistoryScoreFragment extends CommonFragment implements SwipeRefresh
     }
 
     void refresh() {
-        LoadDataFromSQLTask task = new LoadDataFromSQLTask();
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if (!isLoaded) {
+            LoadDataFromSQLTask task = new LoadDataFromSQLTask();
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
     }
 
     @Override
@@ -93,6 +107,12 @@ public class HistoryScoreFragment extends CommonFragment implements SwipeRefresh
 
 
     class LoadDataFromSQLTask extends AsyncTask<Void, Object, List<Object>> {
+
+        @Override
+        protected void onPreExecute() {
+            isLoaded = true;
+        }
+
         @Override
         protected List<Object> doInBackground(Void... v) {
             Log.e("THE_DV", "Executing asyntask of History collection");
@@ -126,6 +146,7 @@ public class HistoryScoreFragment extends CommonFragment implements SwipeRefresh
 
         @Override
         protected void onPostExecute(List<Object> list) {
+            isLoaded = true;
             if (list.size() != 0) {
                 listHistoryScore.removeAll(listHistoryScore);
                 for (Object o : list) {
@@ -141,11 +162,13 @@ public class HistoryScoreFragment extends CommonFragment implements SwipeRefresh
                     swipe_content.setRefreshing(true);
             }
             historyScoreAdapter.notifyDataSetChanged();
+
+            ((IActivityCallBack) getActivity()).callBack();
         }
     }
 
-    public interface ILoadEmptyFragment {
-        public void loadEmptyFragment(boolean isEmpty);
+    public interface IActivityCallBack {
+        void callBack();
     }
 
     @Override

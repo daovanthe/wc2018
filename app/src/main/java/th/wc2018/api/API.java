@@ -1,11 +1,20 @@
 package th.wc2018.api;
 
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.ExecutionException;
+
+import data.firebase.DataFireBase;
 
 public abstract class API {
     private String key = "vA4yJ0A9MNe0bu5b", secrete = "xDeXXO0pK2rCmhDSSIqCI1LuO0vZuBb2";
@@ -17,13 +26,10 @@ public abstract class API {
     }
 
     public API() {
-
-    }
-
-    public API(String key, String secret, String[] legue1) {
-        this.key = key;
-        this.secrete = secrete;
-        this.leagueIDs = leagueIDs;
+        DataFireBase dataFireBase = DataFireBase.getInstance();
+        this.key = dataFireBase.getKey();
+        this.secrete = dataFireBase.getSecret();
+        this.leagueIDs = dataFireBase.getLegue1();
     }
 
     public void setKey(String key) {
@@ -46,9 +52,16 @@ public abstract class API {
         this.leagueIDs = leagueIDs;
     }
 
-    public abstract void getObject();
+    protected abstract void getObject();
+
+    public void loadObjectFromIntenet() {
+        new Thread(() -> {
+            getObject();
+        }).start();
+    }
 
     public String getJsonStringFromLinkAPI(String httpLink) {
+        Log.e("THE_DV", "api load data from internet on background: " + httpLink);
         URL oracle = null;
         try {
             oracle = new URL(httpLink);
@@ -61,7 +74,6 @@ public abstract class API {
             yc.setConnectTimeout(1000);
         } catch (IOException e) {
             e.printStackTrace();
-
         }
         StringBuffer bufferReader = new StringBuffer();
         try {
@@ -78,12 +90,23 @@ public abstract class API {
         }
         String result = bufferReader.toString();
         bufferReader.setLength(0);
+        mOnLoadApiComletedListener.loadApiCompleted(result);
+
         return result;
     }
+
 
     protected OnLoadApiCompletedListener mOnLoadApiComletedListener;
 
     public void AddOnLoadApiCOmpleteListener(OnLoadApiCompletedListener pOnLoadApiComletedListener) {
         mOnLoadApiComletedListener = pOnLoadApiComletedListener;
     }
+
+    class GetObjectFromInternetThread extends Thread {
+        public void run() {
+            getObject();
+        }
+    }
+
+
 }

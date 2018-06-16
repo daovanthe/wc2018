@@ -1,6 +1,5 @@
 package th.wc2018.ulity;
 
-import com.google.protobuf.Enum;
 
 import java.util.HashMap;
 
@@ -16,6 +15,7 @@ public class UtilConvertor {
     static {
         hashFlag.put("Egypt", R.drawable.egypt);
         hashFlag.put("Morroco", R.drawable.morocco);
+        hashFlag.put("Morocco", R.drawable.morocco);
         hashFlag.put("Nigeria", R.drawable.nigeria);
         hashFlag.put("Senegal", R.drawable.senegal);
         hashFlag.put("Tunisia", R.drawable.tunisia);

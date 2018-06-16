@@ -6,37 +6,30 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
-import java.util.concurrent.ExecutionException;
 
 import data.obtain.LoadData;
-import data.raw.Events;
 import data.raw.LiveScore;
 import th.wc2018.R;
 import th.wc2018.adapter.LiveScoreAdapter;
-import th.wc2018.adapter.LiveScoreEventAdapter;
+import th.wc2018.api.OnLoadApiCompletedListener;
+import th.wc2018.api.apiImp.LiveScoreApi;
 import th.wc2018.broadcast.MAction;
-import th.wc2018.ulity.DateUnity;
 
 public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLayout.OnRefreshListener {
     private LiveScoreAdapter liveScoreAdapter;
-    private List<Object> listLiveScore = new ArrayList<>();
+    private List<Object> listLiveScoreData = new ArrayList<>();
     private LiveScoreAdapter matchesAdapter;
     private SwipeRefreshLayout swipe_content;
+    private ListView listScoreView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,106 +37,83 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_score_layout, container, false);
 
-        ListView listScoreView = (ListView) view.findViewById(R.id.list_live_score);
+        listScoreView = (ListView) view.findViewById(R.id.list_live_score);
         swipe_content = (SwipeRefreshLayout) view.findViewById(R.id.swipe_content);
         swipe_content.setOnRefreshListener(this);
-        //
-        listScoreView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                mGestureDetector.onTouchEvent(motionEvent);
-                return false;
-            }
-        });
-
-        liveScoreAdapter = new LiveScoreAdapter(getActivity(), 0, listLiveScore);
+        liveScoreAdapter = new LiveScoreAdapter(getActivity(), 0, listLiveScoreData);
         listScoreView.setAdapter(liveScoreAdapter);
-
         LoadDataFromSQLTask task = new LoadDataFromSQLTask();
-        task.execute(listLiveScore);
-
-
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(MAction.REQUEST_DATABASE_CHANGE);
-//        getActivity().registerReceiver(mDataBaseChangeListener, intentFilter);
-        // refresh elements
-
+        intentFilter.addAction(MAction.REQUEST_DATABASE_SCORE_CHANGE);
         return view;
+    }
+
+    private void refresh() {
+        Log.e("THE_DV", "refreshing to load data .... (started Asyntask)");
+        LoadDataFromSQLTask task = new LoadDataFromSQLTask();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
     }
 
     @Override
     public void onRefresh() {
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                LoadDataFromSQLTask task = new LoadDataFromSQLTask();
-                task.execute(listLiveScore);
-                swipe_content.setRefreshing(false);
-            }
-        }, 5000);
+        refresh();
     }
 
-
-    class LoadDataFromSQLTask extends AsyncTask<List<Object>, Object, List<Object>> {
+    class LoadDataFromSQLTask extends AsyncTask<Void, LiveScore, List<Object>> {
         @Override
-        protected List<Object> doInBackground(List<Object>... allmatchesInfos) {
-            List<Object> allLiveScoreMatches = allmatchesInfos[0];// new ArrayList<>();
-            allLiveScoreMatches.removeAll(allLiveScoreMatches);
-
-            LoadData loadData = null;
-
-            try {
-                loadData = new LoadData(getActivity(), "wcdata");
-            } catch (IllegalArgumentException w) {
-                w.printStackTrace();
-            }
-
-            if (loadData != null) {
-                List<LiveScore> listMatchesPerDay = loadData.getLiveScoreDao().getScore();
-
-                for (LiveScore singleMatch : listMatchesPerDay) {
-
-                    String statusMatch = singleMatch.getStatus();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
-
-                    if (statusMatch.trim().equals("FINISHED") || statusMatch.trim().equals("INSUFFICIENT DATA")) {
-                        continue;
-                    }//
-
-                    List<Events> events = loadData.getEventLiveScoreDao().getEventBy(singleMatch.getLeague_id(), singleMatch.getId());
-                    for (Events e : events) {
-                        singleMatch.addEvent(e);
-                    }
-                    onProgressUpdate(singleMatch);
-                    allLiveScoreMatches.add(singleMatch);
+        protected List<Object> doInBackground(Void... allmatchesInfos) {
+            List<Object> listOBject = new ArrayList<>();
+            LiveScoreApi liveScoreApi = new LiveScoreApi();
+            liveScoreApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
+                @Override
+                public void loadApiCompleted(Object... result) {
+                    LiveScore[] liveScoreDatas = (LiveScore[]) result;
+                    for (LiveScore liveScore : liveScoreDatas)
+                        listOBject.add(liveScore);
                 }
-                loadData.closeConnect();
-            }
-            return allLiveScoreMatches;
-        }
-
-        @Override
-        protected void onProgressUpdate(Object... values) {
-            super.onProgressUpdate(values);
-            getActivity().runOnUiThread(() -> {
-                liveScoreAdapter.notifyDataSetChanged();
-
             });
-
-            LiveScore liveScore = (LiveScore) values[0];
-            LiveScoreEventAdapter adapter = (LiveScoreEventAdapter) liveScore.getTag();
-            if (adapter != null)
-                adapter.notifyDataSetChanged();
-
-
+            liveScoreApi.loadObjectFromIntenet();
+            return listOBject;
         }
 
         @Override
         protected void onPostExecute(List<Object> list) {
-            super.onPostExecute(list);
+            if (list.size() != 0) {
+                listLiveScoreData.removeAll(listLiveScoreData);
+                for (Object o : list) {
+                    listLiveScoreData.add(o);
+                }
+                liveScoreAdapter.notifyDataSetChanged();
+                if (swipe_content != null)
+                    swipe_content.setRefreshing(false);
+            } else {
+                Log.e("THE_DV", "refresh if list is 0");
+                ((SwipeRefreshLayout.OnRefreshListener) LiveScoreFragment.this).onRefresh();
+                if (swipe_content != null)
+                    swipe_content.setRefreshing(true);
+            }
         }
+    }
+
+    public interface ILoadEmptyFragment {
+        public void loadEmptyFragment(boolean isEmpty);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilterf = new IntentFilter();
+        intentFilterf.addAction(MAction.REQUEST_DATABASE_SCORE_CHANGE);
+        getActivity().registerReceiver(mDataBaseChangeListener, intentFilterf);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().unregisterReceiver(mDataBaseChangeListener);
     }
 
     private DataBaseChangeListener mDataBaseChangeListener = new DataBaseChangeListener();
@@ -151,11 +121,13 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
     class DataBaseChangeListener extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-//            if (intent.getAction().equals(MAction.REQUEST_DATABASE_CHANGE))
-//                getActivity().runOnUiThread(() -> {
-//                    // refreshData();
-//                });
+            if (intent.getAction().equals(MAction.REQUEST_DATABASE_SCORE_CHANGE))
+                Log.e("THE_DV", "Broadcast Receiver Score OK");
+            getActivity().runOnUiThread(() -> {
+                refresh();
+            });
         }
     }
+
 
 }

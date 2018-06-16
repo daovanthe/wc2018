@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,16 +17,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.ads.MobileAds;
+
 import th.wc2018.R;
 import th.wc2018.WcService;
-import th.wc2018.activity.fragment.CommonFragment;
 import th.wc2018.activity.fragment.GroupScoreFragment;
+import th.wc2018.activity.fragment.HistoryScoreFragment;
 import th.wc2018.activity.fragment.LiveScoreFragment;
 import th.wc2018.activity.fragment.MatchesFragment;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, LiveScoreFragment.ILoadEmptyFragment {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,73 +46,134 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
         // for testing
-
         initFragment();
 
         Intent serviceIntent = new Intent();
         serviceIntent.setPackage("th.wc2018");
         serviceIntent.setClass(this, WcService.class);
 
+        //this.bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
+        //startService(serviceIntent);
+        ///
+        // Instantiate a ViewPager and a PagerAdapter.
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+        mPager.setCurrentItem(1);
+        // admob
 
-//        this.bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
-        startService(serviceIntent);
+        // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
+        MobileAds.initialize(this, "ca-app-pub-1510017343836393~6283549009");
+        // video
     }
+
+    // region Admob
+
+    // endregion
+
+    ViewPager mPager;
+    ScreenSlidePagerAdapter mPagerAdapter;
+
+    /**
+     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
+     * sequence.
+     */
+    private boolean isEmptyLiveScore;
+
+    @Override
+    public void loadEmptyFragment(boolean isEmpty) {
+        isEmptyLiveScore = isEmpty;
+        mPagerAdapter.notifyDataSetChanged();
+
+    }
+
+
+    public interface CalendarPageFragmentListener {
+        void onSwitchToNextFragment();
+    }
+
+    public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter  {
+        int NUM_PAGES = 4;
+
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return liveScoreFragment;
+                case 1:
+                    return matchesFragment;
+                case 2:
+                    return historyScoreFragment;
+                case 3:
+                    return groupScoreFragment;
+            }
+            return liveScoreFragment;
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
+    }
+
 
     private void initFragment() {
         fragmentManager = getSupportFragmentManager();
+        liveScoreFragment = new LiveScoreFragment();// ((SwipeRefreshLayout.OnRefreshListener) liveScoreFragment).onRefresh();
+        matchesFragment = new MatchesFragment();//((SwipeRefreshLayout.OnRefreshListener) matchesFragment).onRefresh();
+        groupScoreFragment = new GroupScoreFragment();//((SwipeRefreshLayout.OnRefreshListener) groupScoreFragment).onRefresh();
+        historyScoreFragment = new HistoryScoreFragment();//((SwipeRefreshLayout.OnRefreshListener) historyScoreFragment).onRefresh();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.add(R.id.frag_holder, liveScoreFragment);
+//        fragmentTransaction.commit();
 
-        liveScoreFragment = new LiveScoreFragment();
-        matchesFragment = new MatchesFragment();
-        groupScoreFragment = new GroupScoreFragment();
+//        liveScoreFragment.setISwipeListener(new CommonFragment.ISwipeListener() {
+//            @Override
+//            public void swipeTo(byte direction) {
+//                if (direction == CommonFragment.SWIPE_LEFT) {
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    fragmentTransaction.setCustomAnimations(R.anim.slide_to_enter_from_right, R.anim.slide_to_left);
+//                    fragmentTransaction.replace(R.id.frag_holder, matchesFragment);
+//                    fragmentTransaction.commit();
+//                }
+//            }
+//        });
+//
+//        matchesFragment.setISwipeListener(new CommonFragment.ISwipeListener() {
+//            @Override
+//            public void swipeTo(byte direction) {
+//                if (direction == CommonFragment.SWIPE_LEFT) {
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    fragmentTransaction.setCustomAnimations(R.anim.slide_to_enter_from_right, R.anim.slide_to_left);
+//                    fragmentTransaction.replace(R.id.frag_holder, groupScoreFragment);
+//                    fragmentTransaction.commit();
+//                } else if (direction == CommonFragment.SWIPE_RIGHT) {
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    fragmentTransaction.setCustomAnimations(R.anim.slide_to_enter_from_left, R.anim.slide_to_right);
+//                    fragmentTransaction.replace(R.id.frag_holder, liveScoreFragment);
+//                    fragmentTransaction.commit();
+//                }
+//            }
+//        });
+//
+//
+//        groupScoreFragment.setISwipeListener(new CommonFragment.ISwipeListener() {
+//            @Override
+//            public void swipeTo(byte direction) {
+//                if (direction == CommonFragment.SWIPE_RIGHT) {
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    fragmentTransaction.setCustomAnimations(R.anim.slide_to_enter_from_left, R.anim.slide_to_right);
+//                    fragmentTransaction.replace(R.id.frag_holder, matchesFragment);
+//                    fragmentTransaction.commit();
+//                }
+//            }
+//        });
 
-        liveScoreFragment.setISwipeListener(new CommonFragment.ISwipeListener() {
-            @Override
-            public void swipeTo(byte direction) {
-                if (direction == CommonFragment.SWIPE_LEFT) {
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.setCustomAnimations(R.anim.slide_to_enter_from_right, R.anim.slide_to_left);
-                    fragmentTransaction.replace(R.id.frag_holder, matchesFragment);
-                    fragmentTransaction.commit();
-                }
-            }
-        });
-
-        matchesFragment.setISwipeListener(new CommonFragment.ISwipeListener() {
-            @Override
-            public void swipeTo(byte direction) {
-                if (direction == CommonFragment.SWIPE_LEFT) {
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.setCustomAnimations(R.anim.slide_to_enter_from_right, R.anim.slide_to_left);
-                    fragmentTransaction.replace(R.id.frag_holder, groupScoreFragment);
-                    fragmentTransaction.commit();
-                } else if (direction == CommonFragment.SWIPE_RIGHT) {
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.setCustomAnimations(R.anim.slide_to_enter_from_left, R.anim.slide_to_right);
-                    fragmentTransaction.replace(R.id.frag_holder, liveScoreFragment);
-                    fragmentTransaction.commit();
-                }
-            }
-        });
-
-
-        groupScoreFragment.setISwipeListener(new CommonFragment.ISwipeListener() {
-            @Override
-            public void swipeTo(byte direction) {
-                if (direction == CommonFragment.SWIPE_RIGHT) {
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.setCustomAnimations(R.anim.slide_to_enter_from_left, R.anim.slide_to_right);
-                    fragmentTransaction.replace(R.id.frag_holder, matchesFragment);
-                    fragmentTransaction.commit();
-                }
-            }
-        });
-
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frag_holder, liveScoreFragment);
-        fragmentTransaction.commit();
 
     }
 
@@ -149,9 +214,11 @@ public class MainActivity extends AppCompatActivity
 
     FragmentManager fragmentManager;
 
-    LiveScoreFragment liveScoreFragment;
+    Fragment liveScoreFragment;
     MatchesFragment matchesFragment;
     GroupScoreFragment groupScoreFragment;
+    HistoryScoreFragment historyScoreFragment;
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -160,18 +227,23 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_live_score) {
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.frag_holder, liveScoreFragment);
-            fragmentTransaction.commit();
+            mPager.setCurrentItem(0);
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.replace(R.id.frag_holder, liveScoreFragment);
+//            fragmentTransaction.commit();
         } else if (id == R.id.nav_matches) {
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.frag_holder, matchesFragment);
-            fragmentTransaction.commit();
+            mPager.setCurrentItem(1);
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.replace(R.id.frag_holder, matchesFragment);
+//            fragmentTransaction.commit();
         } else if (id == R.id.nav_group_score) {
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.frag_holder, groupScoreFragment);
-            fragmentTransaction.commit();
+            mPager.setCurrentItem(2);
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.replace(R.id.frag_holder, groupScoreFragment);
+//            fragmentTransaction.commit();
 
+        } else if (id == R.id.nav_history_score) {
+            mPager.setCurrentItem(3);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -182,6 +254,8 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 ///
 
 //    @Override

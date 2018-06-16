@@ -1,43 +1,35 @@
 package th.wc2018.adapter;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import data.app.App;
-import data.obtain.LoadData;
 import data.raw.Events;
+import data.raw.History;
 import data.raw.LiveScore;
 import th.wc2018.R;
 import th.wc2018.ulity.UtilConvertor;
 
-public class LiveScoreAdapter extends ArrayAdapter {
-    public LiveScoreAdapter(@NonNull Context context, int resource, List<Object> object) {
+public class HistoryScoreAdapter extends ArrayAdapter {
+    public HistoryScoreAdapter(@NonNull Context context, int resource, List<Object> object) {
         super(context, resource, object);
     }
 
 
     class ViewHolder {
         ImageView homeImg, awayImg, refreshIcon;
-        TextView homeName, awayName, updateTime, allTime, halfTime, fullTime, exTime, header_live_score, status_txt, timeMatch;
+        TextView homeName, awayName, updateTime, allTime, halfTime, fullTime, exTime, header_live_score, status_txt;
         RelativeLayout eventList;
     }
 
@@ -47,14 +39,12 @@ public class LiveScoreAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
-
-        LiveScore liveScore = (LiveScore) getItem(position);
+        History liveScore = (History) getItem(position);
 
         if (v == null) {
             LayoutInflater inplatter = LayoutInflater.from(getContext());
             v = inplatter.inflate(R.layout.item_score_layout, null);
         }
-
         ViewHolder holder = new ViewHolder();
         holder.header_live_score = (TextView) v.findViewById(R.id.header_live_score);
 
@@ -64,16 +54,13 @@ public class LiveScoreAdapter extends ArrayAdapter {
         holder.homeName = (TextView) v.findViewById(R.id.home_name_txt);
         holder.awayName = (TextView) v.findViewById(R.id.away_name_txt);
 
-        holder.timeMatch = (TextView) v.findViewById(R.id.time_match);
-
         holder.updateTime = (TextView) v.findViewById(R.id.date_update_txt);
-        holder.status_txt = (TextView) v.findViewById(R.id.status_txt);
+        holder.status_txt = (TextView)  v.findViewById(R.id.status_txt);
 
         holder.allTime = (TextView) v.findViewById(R.id.all_time_txt);
         holder.halfTime = (TextView) v.findViewById(R.id.half_time);
         holder.fullTime = (TextView) v.findViewById(R.id.full_time);
         holder.exTime = (TextView) v.findViewById(R.id.ex_time);
-        holder.eventList = (RelativeLayout) v.findViewById(R.id.event_list_score);
 
         holder.header_live_score.setText(liveScore.getLeague_name());
         holder.homeImg.setImageResource(UtilConvertor.convertFlagCountry(liveScore.getHome_name()));
@@ -88,7 +75,6 @@ public class LiveScoreAdapter extends ArrayAdapter {
         holder.halfTime.setText(liveScore.getHt_score());
         holder.fullTime.setText(liveScore.getFt_score());
         holder.exTime.setText(liveScore.getEt_score());
-        holder.timeMatch.setText(liveScore.getTime() + "'");
 
 //        ArrayAdapter adapter = (ArrayAdapter) holder.eventList.getTag();
 //        if (adapter == null) {
@@ -122,48 +108,48 @@ public class LiveScoreAdapter extends ArrayAdapter {
 //        holder.eventList.setAdapter(adapter);
 //        liveScore.setTag(adapter);
 
-        holder.eventList.removeAllViews();
-        View tempView = null;
-        int ID_temp = 0;
-        if (liveScore.getListEvents().size() > 0) {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) getContext().getResources().getDimension(R.dimen.event_height));
-            Events event = liveScore.getListEvents().get(0);
-            View eventViewLayout = LayoutInflater.from(getContext()).inflate(R.layout.item_event_layout, null);
-            eventViewLayout.setId(View.generateViewId());
-            ImageView country = eventViewLayout.findViewById(R.id.home_away);
-            ImageView eventImg = eventViewLayout.findViewById(R.id.event_img);
-            TextView time = eventViewLayout.findViewById(R.id.time);
-            TextView player = eventViewLayout.findViewById(R.id.player);
-            country.setImageResource(UtilConvertor.convertFlagCountry(event.getHome_away_name()));
-            eventImg.setImageResource(UtilConvertor.convertEventStringToImg(event.getEvent()));
-            time.setText(event.getTime());
-            player.setText(event.getPlayer());
-            ID_temp = eventViewLayout.getId();
-            params.addRule(RelativeLayout.ALIGN_PARENT_TOP, ID_temp);
-            eventViewLayout.setLayoutParams(params);
-        }
-        for (int i = 1; i < liveScore.getListEvents().size(); i++) {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) getContext().getResources().getDimension(R.dimen.event_height));
-            Events event = liveScore.getListEvents().get(i);
-            View eventViewLayout = LayoutInflater.from(getContext()).inflate(R.layout.item_event_layout, null);
-            eventViewLayout.setId(View.generateViewId());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                eventViewLayout.setId(View.generateViewId());
-            }
-            ImageView country = eventViewLayout.findViewById(R.id.home_away);
-            ImageView eventImg = eventViewLayout.findViewById(R.id.event_img);
-            TextView time = eventViewLayout.findViewById(R.id.time);
-            TextView player = eventViewLayout.findViewById(R.id.player);
-            country.setImageResource(UtilConvertor.convertFlagCountry(event.getHome_away_name()));
-            eventImg.setImageResource(UtilConvertor.convertEventStringToImg(event.getEvent()));
-            time.setText(event.getTime() + "'");
-            player.setText(event.getPlayer());
-            holder.eventList.addView(eventViewLayout);
-            params.addRule(RelativeLayout.BELOW, ID_temp);
-            eventViewLayout.setLayoutParams(params);
-            ID_temp = eventViewLayout.getId();
-            eventViewLayout.setLayoutParams(params);
-        }
+//        holder.eventList.removeAllViews();
+//        View tempView = null;
+//        int ID_temp = 0;
+//        if (liveScore.getListEvents().size() > 0) {
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) getContext().getResources().getDimension(R.dimen.event_height));
+//            Events event = liveScore.getListEvents().get(0);
+//            View eventViewLayout = LayoutInflater.from(getContext()).inflate(R.layout.item_event_layout, null);
+//            eventViewLayout.setId(View.generateViewId());
+//            ImageView country = eventViewLayout.findViewById(R.id.home_away);
+//            ImageView eventImg = eventViewLayout.findViewById(R.id.event_img);
+//            TextView time = eventViewLayout.findViewById(R.id.time);
+//            TextView player = eventViewLayout.findViewById(R.id.player);
+//            country.setImageResource(UtilConvertor.convertFlagCountry(event.getHome_away_name()));
+//            eventImg.setImageResource(UtilConvertor.convertEventStringToImg(event.getEvent()));
+//            time.setText(event.getTime());
+//            player.setText(event.getPlayer());
+//            ID_temp = eventViewLayout.getId();
+//            params.addRule(RelativeLayout.ALIGN_PARENT_TOP, ID_temp);
+//            eventViewLayout.setLayoutParams(params);
+//        }
+//        for (int i = 1; i < liveScore.getListEvents().size(); i++) {
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) getContext().getResources().getDimension(R.dimen.event_height));
+//            Events event = liveScore.getListEvents().get(i);
+//            View eventViewLayout = LayoutInflater.from(getContext()).inflate(R.layout.item_event_layout, null);
+//            eventViewLayout.setId(View.generateViewId());
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//                eventViewLayout.setId(View.generateViewId());
+//            }
+//            ImageView country = eventViewLayout.findViewById(R.id.home_away);
+//            ImageView eventImg = eventViewLayout.findViewById(R.id.event_img);
+//            TextView time = eventViewLayout.findViewById(R.id.time);
+//            TextView player = eventViewLayout.findViewById(R.id.player);
+//            country.setImageResource(UtilConvertor.convertFlagCountry(event.getHome_away_name()));
+//            eventImg.setImageResource(UtilConvertor.convertEventStringToImg(event.getEvent()));
+//            time.setText(event.getTime() + "'");
+//            player.setText(event.getPlayer());
+//            holder.eventList.addView(eventViewLayout);
+//            params.addRule(RelativeLayout.BELOW, ID_temp);
+//            eventViewLayout.setLayoutParams(params);
+//            ID_temp = eventViewLayout.getId();
+//            eventViewLayout.setLayoutParams(params);
+//        }
 
 //        holder.eventList.setLayoutParams(params);
 

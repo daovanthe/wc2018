@@ -1,17 +1,14 @@
 package th.wc2018.activity.fragment;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -24,113 +21,73 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutionException;
 
 import data.obtain.LoadData;
 import data.raw.Fixtures;
 import th.wc2018.R;
 import th.wc2018.adapter.MatchAdapter;
+import th.wc2018.api.OnLoadApiCompletedListener;
+import th.wc2018.api.apiImp.FixturesAPI;
 import th.wc2018.broadcast.MAction;
 
 public class MatchesFragment extends CommonFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private android.support.v4.widget.SwipeRefreshLayout mSwipeContent;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_matches_layout, container, false);
-        mSwipeContent = (SwipeRefreshLayout) view.findViewById(R.id.match_refresh_content);
+        mSwipeContent = view.findViewById(R.id.match_refresh_content);
         mSwipeContent.setOnRefreshListener(this);
 
         Log.d("THE_DV", "MatchesActivity on created () ;");
-
-        allMatchesListView = (ListView) view.findViewById(R.id.all_matches);
-
-
-        allMatchesListView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                mGestureDetector.onTouchEvent(motionEvent);
-                return false;
-            }
-        });
-
+        allMatchesListView = view.findViewById(R.id.all_matches);
         matchesData = new ArrayList<>();
-        LoadDataFromSQLTask task = new LoadDataFromSQLTask();
-        task.execute(matchesData);
-//
-//        try {
-//            matchesData = task.get();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
 
         matchesAdapter = new MatchAdapter(getActivity(), matchesData);
         allMatchesListView.setAdapter(matchesAdapter);
+        Log.e("THE_DV", "on Create View Matches Fragment ...");
 
-//        IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction(MAction.FIXTURES_DATABASE_CHANGE);
-//        getActivity().registerReceiver(mDataBaseChangeListener, intentFilter);
-
+        new MatchesFromSQLTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        Log.e("THE_DV", "pass task.execute()... isCannel: ");
         return view;
     }
 
-
     @Override
     public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
+        Log.e("THE_DV", "on refresh");
+        new Thread() {
             @Override
             public void run() {
-                refreshData();
-                mSwipeContent.setRefreshing(false);
+                Log.e("THE_DV", "on refresh");
+                FixturesAPI fixturesApi = new FixturesAPI();
+                fixturesApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
+                    @Override
+                    public void loadApiCompleted(Object... result) {
+                        Fixtures[] fixturesData = (Fixtures[]) result;
+                        LoadData mLoadData = new LoadData(getActivity(), "wcdata");
+                        if (mLoadData != null) {
+                            Log.e("THE_DV", "on load data OK");
+                            mLoadData.getFixturesDao().insert(fixturesData);
+                            Intent intent = new Intent();
+                            intent.setAction(MAction.FIXTURES_DATABASE_CHANGE);
+                            Log.e("THE_DV", "on send data OK: FIXTURES_DATABASE_CHANGE");
+                            getActivity().sendBroadcast(intent);
+                        }
+                    }
+                });
+                fixturesApi.loadObjectFromIntenet();
             }
-        }, 5000);
+        }.start();
     }
 
-    private ListView allMatchesListView;
-    private List<Object> matchesData;
-    private ConcurrentLinkedQueue data;
-    private MatchAdapter matchesAdapter;
-
-    public void refreshData() {
-        LoadDataFromSQLTask task = new LoadDataFromSQLTask();
-        task.execute(matchesData);
-        try {
-            List<Object> objects = task.get();
-
-//            synchronized (matchesData) {
-//                Iterator<Object> iter = matchesData.iterator();
-//                while (iter.hasNext()) {
-//                    Object o = iter.next();
-//                    matchesData.remove(o);
-//                }
-//                for (Object o : objects) {
-//                    matchesData.add(o);
-//                }
-            matchesAdapter.notifyDataSetChanged();
-//            }
-
-        } catch (
-                InterruptedException e) {
-            e.printStackTrace();
-        } catch (
-                ExecutionException e)
-
-        {
-            e.printStackTrace();
-        }
-    }
-
-
-    class LoadDataFromSQLTask extends AsyncTask<List<Object>, Void, List<Object>> {
+    class MatchesFromSQLTask extends AsyncTask<Void, Void, List<Object>> {
         @Override
-        protected List<Object> doInBackground(List<Object>... allmatchesInfos) {
-            List<Object> allmatchesInfo = allmatchesInfos[0];// new ArrayList<>();
+        protected List<Object> doInBackground(Void... allmatchesInfos) {
+            Log.e("THE_DV", "Executing asyntask of Matches collection");
+            List<Object> allmatchesInfo = new ArrayList<>();
             allmatchesInfo.removeAll(allmatchesInfo);
             LoadData loadData = null;
             try {
@@ -154,65 +111,70 @@ public class MatchesFragment extends CommonFragment implements SwipeRefreshLayou
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-
                         Date currentTime = Calendar.getInstance().getTime();
                         if (date1.after(currentTime)) {
                             allmatchesInfo.add(singleMatch);
                             hasMatch = true;
                         }
+                        onProgressUpdate();
                     }
                     if (!hasMatch) {
                         allmatchesInfo.remove(day);
                     }
                 }
-                onProgressUpdate();
                 loadData.closeConnect();
             }
             return allmatchesInfo;
         }
 
         @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-            Activity activity = getActivity();
-            if (activity != null) {
-                activity.runOnUiThread(new Runnable() {
-                    public void run() {
-                        matchesAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        }
-
-        @Override
         protected void onPostExecute(List<Object> list) {
-            super.onPostExecute(list);
-            Activity activity = getActivity();
-            if (activity != null) {
-                activity.runOnUiThread(new Runnable() {
-                    public void run() {
-                        matchesAdapter.notifyDataSetChanged();
-                    }
-                });
+            if (list.size() != 0) {
+                matchesData.removeAll(matchesData);
+                for (Object o : list) {
+                    matchesData.add(o);
+                }
+                matchesAdapter.notifyDataSetChanged();
+
+                if (mSwipeContent != null)
+                    mSwipeContent.setRefreshing(false);
+            } else {
+                Log.e("THE_DV", "refresh if list is 0");
+                ((SwipeRefreshLayout.OnRefreshListener) MatchesFragment.this).onRefresh();
+                if (mSwipeContent != null)
+                    mSwipeContent.setRefreshing(true);
             }
         }
 
     }
+
+
+    public void refreshData() {
+        MatchesFromSQLTask task = new MatchesFromSQLTask();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+
+    private ListView allMatchesListView;
+    private List<Object> matchesData;
+    private ConcurrentLinkedQueue data;
+    private MatchAdapter matchesAdapter;
 
 
     @Override
     public void onStart() {
         super.onStart();
-        //startService(serviceIntent);
+        IntentFilter intentFilterf = new IntentFilter();
+        intentFilterf.addAction(MAction.FIXTURES_DATABASE_CHANGE);
+        getActivity().registerReceiver(mDataBaseChangeListener, intentFilterf);
+
 
     }
-
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.e("THE_DV", "MatchesFragment.class -> onStop() -> unregisterReceiver(mDataBaseChangeListener);");
-//        getActivity().unregisterReceiver(mDataBaseChangeListener);
+        getActivity().unregisterReceiver(mDataBaseChangeListener);
     }
 
     private DataBaseChangeListener mDataBaseChangeListener = new DataBaseChangeListener();
@@ -220,10 +182,12 @@ public class MatchesFragment extends CommonFragment implements SwipeRefreshLayou
     class DataBaseChangeListener extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-//            if (intent.getAction().equals(MAction.FIXTURES_DATABASE_CHANGE))
-//                getActivity().runOnUiThread(() -> {
-//                    refreshData();
-//                });
+            if (intent.getAction().equals(MAction.FIXTURES_DATABASE_CHANGE)) {
+                Log.e("THE_DV", "Broadcast Receiver matches OK");
+                refreshData();
+            }
         }
     }
+
+
 }

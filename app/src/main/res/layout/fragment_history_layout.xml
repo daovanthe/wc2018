@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/text_group_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="History"
+        android:textColor="@android:color/background_light"
+        android:textSize="32sp"
+        app:fontFamily="@font/aldrich" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/text_group_id">
+        <ListView
+            android:id="@+id/list_history_score"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:smoothScrollbar="true" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

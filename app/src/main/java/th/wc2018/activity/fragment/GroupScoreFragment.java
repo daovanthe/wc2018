@@ -67,6 +67,8 @@ public class GroupScoreFragment extends CommonFragment implements SwipeRefreshLa
         if (!isLoaded) {
             LoadGroupDataFromSQLTask task = new LoadGroupDataFromSQLTask(getActivity());
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } if (isLoaded) {
+            mSwipeContent.setRefreshing(false);
         }
     }
 
@@ -106,15 +108,15 @@ public class GroupScoreFragment extends CommonFragment implements SwipeRefreshLa
 
         @Override
         protected void onPostExecute(List<Object> objects) {
-            isLoaded = true;
+            Log.e("THE_DV", "load done GROUPING");
+            isLoaded = false;
             if (objects.size() != 0) {
                 listGroupScore.removeAll(listGroupScore);
                 for (Object o : objects) {
                     listGroupScore.add(o);
                 }
                 groupScoreAdapter.notifyDataSetChanged();
-                if (mSwipeContent != null)
-                    mSwipeContent.setRefreshing(false);
+                mSwipeContent.setRefreshing(false);
             }
         }
     }

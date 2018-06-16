@@ -36,7 +36,6 @@ public class HistoryScoreFragment extends CommonFragment implements SwipeRefresh
     public void onResume() {
         super.onResume();
         if (!isLoaded) {
-            swipe_content.setRefreshing(true);
             LoadDataFromSQLTask task = new LoadDataFromSQLTask();
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
@@ -110,6 +109,7 @@ public class HistoryScoreFragment extends CommonFragment implements SwipeRefresh
 
         @Override
         protected void onPreExecute() {
+            swipe_content.setRefreshing(true);
             isLoaded = true;
         }
 
@@ -146,7 +146,7 @@ public class HistoryScoreFragment extends CommonFragment implements SwipeRefresh
 
         @Override
         protected void onPostExecute(List<Object> list) {
-            isLoaded = true;
+            isLoaded = false;
             if (list.size() != 0) {
                 listHistoryScore.removeAll(listHistoryScore);
                 for (Object o : list) {
@@ -162,8 +162,6 @@ public class HistoryScoreFragment extends CommonFragment implements SwipeRefresh
                     swipe_content.setRefreshing(true);
             }
             historyScoreAdapter.notifyDataSetChanged();
-
-            ((IActivityCallBack) getActivity()).callBack();
         }
     }
 

@@ -65,7 +65,7 @@ public class UtilConvertor {
         public  static String URUGUAY = "Uruguay";
         public  static String PORTUGAL = "Portugal";
         public  static String SPAIN = "Spain";
-        public  static String MOROCCO = "Morroco";
+        public  static String MOROCCO = "Morocco";
         public  static String IR_IRAN = "Iran";
         public  static String FRANCE = "France";
         public  static String AUSTRALIA = "Australia";

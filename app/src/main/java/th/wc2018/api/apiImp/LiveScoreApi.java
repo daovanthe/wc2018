@@ -32,6 +32,7 @@ public class LiveScoreApi extends API {
             apiCommand.append("&league=" + legueID);
             // extract Object
             //TO-DO
+            Log.e("THE_DV", "live link: " + apiCommand.toString());
             loadApiToObject(apiCommand.toString());
         }
 
@@ -68,18 +69,17 @@ public class LiveScoreApi extends API {
                     String Event = match.getEvents();
 
 
-                    String eventDataString = getJsonStringFromLinkAPI(Event);
+                    String eventDataString = getJsonStringFromLinkAPI(Event.replace("amp;",""));
                     // we will replace the json object to testing
 //                    String eventDataString = "{ \"success\": true, \"data\": { \"event\": [ { \"id\": \"1\", \"match_id\": \"14\", \"player\": \"SAAVEDRA MATIAS\", \"time\": \"26\", \"event\": \"GOAL\", \"sort\": \"0\", \"home_away\": \"a\" }, { \"id\": \"2\", \"match_id\": \"14\", \"player\": \"MARTINEZ WILLIAMS\", \"time\": \"29\", \"event\": \"GOAL\", \"sort\": \"1\", \"home_away\": \"a\" }, { \"id\": \"3\", \"match_id\": \"14\", \"player\": \"SAAVEDRA MATIAS\", \"time\": \"59\", \"event\": \"GOAL\", \"sort\": \"2\", \"home_away\": \"a\" }, { \"id\": \"4\", \"match_id\": \"14\", \"player\": \"LOPEZ RENZO\", \"time\": \"91\", \"event\": \"GOAL\", \"sort\": \"3\", \"home_away\": \"h\" }, { \"id\": \"5\", \"match_id\": \"14\", \"player\": \"LOPEZ RENZO\", \"time\": \"94\", \"event\": \"GOAL_PENALTY\", \"sort\": \"4\", \"home_away\": \"h\" } ] } }";
+                    if (eventDataString.length() == 0) continue;
 
-                    JsonObject objEvent = parser.parse(scoreData).getAsJsonObject();
                     obj = parser.parse(eventDataString).getAsJsonObject();
                     JsonArray subArgsEvent = obj.get("data").getAsJsonObject()
                             .get("event").getAsJsonArray();
                     Events[] liveScoreEvents = gson.fromJson(subArgsEvent.toString(), Events[].class);
 
                     // update league id for each event
-
                     for (Events eventLiveScore : liveScoreEvents) {
                         eventLiveScore.setLeague_id(match.getLeague_id());
                         if (eventLiveScore.getHome_away().equals("a")) {
@@ -87,7 +87,7 @@ public class LiveScoreApi extends API {
                         } else if (eventLiveScore.getHome_away().equals("h")) {
                             eventLiveScore.setHome_away_name(match.getHome_name());
                         }
-
+                        match.getListEvents().add(eventLiveScore);
                     }
                     if (mILoadLiveScoreEvent != null)
                         mILoadLiveScoreEvent.loadEventCompleted(liveScoreEvents);
@@ -101,6 +101,9 @@ public class LiveScoreApi extends API {
             e.printStackTrace();
         }
     }
+
+
+
 
     private ILoadLiveScoreEvent mILoadLiveScoreEvent;
 

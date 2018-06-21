@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.obtain.LoadData;
+import data.raw.Events;
 import data.raw.History;
 import data.raw.LiveScore;
 import th.wc2018.R;
@@ -87,15 +88,17 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
             liveScoreApi.AddOnLoadApiCOmpleteListener(new OnLoadApiCompletedListener() {
                 @Override
                 public void loadApiCompleted(Object... result) {
-                    Log.e("THE_DV", "load live done");
                     LiveScore[] liveScoreDatas = (LiveScore[]) result;
                     for (LiveScore liveScore : liveScoreDatas) {
                         localListLiveScoreData.add(liveScore);
                         publishProgress(liveScore);
                     }
 
+                    Log.e("THE_DV", "load live done");
                 }
             });
+
+
             liveScoreApi.loadObjectFromIntenet();
 
 

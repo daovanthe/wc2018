@@ -253,4 +253,45 @@ public class History {
                 ", events='" + events + '\'' +
                 '}';
     }
+
+    public static History makeHistory(LiveScore liveScore1) {
+        return new History(
+                liveScore1.id ,
+                liveScore1.home_name,
+                liveScore1.away_name,
+                liveScore1.score,
+                liveScore1.ht_score,
+                liveScore1.ft_score,
+                liveScore1.et_score,
+                liveScore1.time,
+                liveScore1.league_id,
+                liveScore1.league_name,
+                liveScore1.added,
+                liveScore1.last_changed,
+                liveScore1.status,
+                liveScore1.home_id,
+                liveScore1.away_id,
+                liveScore1.events
+        );
+    }
+
+    public History(@NonNull String id, String home_name, String away_name, String score, String ht_score, String ft_score, String et_score, String time, String league_id, String league_name, String added, String last_changed, String status, String home_id, String away_id, String events ) {
+        this.listEvents = new ArrayList<>();
+        this.id             = id;
+        this.home_name      = home_name;
+        this.away_name      = away_name;
+        this.score          = score;
+        this.ht_score       = ht_score;
+        this.ft_score       = ft_score;
+        this.et_score       = et_score;
+        this.time           = time;
+        this.league_id      = league_id;
+        this.league_name    = league_name;
+        this.added          = added;
+        this.last_changed       = last_changed;
+        this.status         = status;
+        this.home_id        = home_id;
+        this.away_id        = away_id;
+        this.events         = events;
+    }
 }

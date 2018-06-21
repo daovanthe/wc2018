@@ -129,14 +129,14 @@ public class LoadData {
 
                 if (mergeData.containsKey(away_name)) {
                     CountryScore away_country_score = mergeData.get(away_name);
-                    away_country_score.setST(away_country_score.getST() + so_tran);
-                    away_country_score.setBT(away_country_score.getBT() + ket_qua_away);
-                    away_country_score.setBB(away_country_score.getBB() + ket_qua_home);
-                    away_country_score.setWin(away_country_score.getWin() + win_away);
-                    away_country_score.setLost(away_country_score.getLost() + lost_away);
-                    away_country_score.setDraw(away_country_score.getDraw() + draw_away);
-                    away_country_score.setPOINT(away_country_score.getDraw() + point_away);
-                    away_country_score.setHIEU_SO(away_country_score.getHIEU_SO() + hieu_so_away);
+                    away_country_score.setST( (Integer.valueOf(away_country_score.getST())) + so_tran + "");
+                    away_country_score.setBT((Integer.valueOf(away_country_score.getBT())) + ket_qua_away+ "");
+                    away_country_score.setBB((Integer.valueOf(away_country_score.getBB())) + ket_qua_home+ "");
+                    away_country_score.setWin((Integer.valueOf(away_country_score.getWin())) + win_away+ "");
+                    away_country_score.setLost((Integer.valueOf(away_country_score.getLost())) + lost_away+ "");
+                    away_country_score.setDraw((Integer.valueOf(away_country_score.getDraw())) + draw_away+ "");
+                    away_country_score.setPOINT((Integer.valueOf(away_country_score.getDraw())) + point_away+ "");
+                    away_country_score.setHIEU_SO((Integer.valueOf(away_country_score.getHIEU_SO())) + hieu_so_away + "");
                 } else {
                     CountryScore away_country_score = new CountryScore(String.valueOf(away_name), String.valueOf(so_tran), String.valueOf(win_away), String.valueOf(draw_away), String.valueOf(lost_away), String.valueOf(ket_qua_away), String.valueOf(ket_qua_home), String.valueOf(hieu_so_away), String.valueOf(point_away));
                     mergeData.put(away_name, away_country_score);

@@ -31,52 +31,52 @@ public class LiveScore {
     // id of the match
     @PrimaryKey
     @NonNull
-    private String id;
+    public String id;
 
     @ColumnInfo(name = "home_name")
-    private String home_name;
+    public String home_name;
 
     @ColumnInfo(name = "away_name")
-    private String away_name;
+    public String away_name;
 
     @ColumnInfo(name = "score")
-    private String score;
+    public String score;
 
     @ColumnInfo(name = "ht_score")
-    private String ht_score;
+    public String ht_score;
 
     @ColumnInfo(name = "ft_score")
-    private String ft_score;
+    public String ft_score;
 
     @ColumnInfo(name = "et_score")
-    private String et_score;
+    public String et_score;
 
     @ColumnInfo(name = "time")
-    private String time;
+    public String time;
 
     @ColumnInfo(name = "league_id")
-    private String league_id;
+    public String league_id;
 
     @ColumnInfo(name = "league_name")
-    private String league_name;
+    public String league_name;
 
     @ColumnInfo(name = "added")
-    private String added;
+    public String added;
 
     @ColumnInfo(name = "last_changed")
-    private String last_changed;
+    public String last_changed;
 
     @ColumnInfo(name = "status")
-    private String status;
+    public String status;
 
     @ColumnInfo(name = "home_id")
-    private String home_id;
+    public String home_id;
 
     @ColumnInfo(name = "away_id")
-    private String away_id;
+    public String away_id;
 
     @ColumnInfo(name = "events")
-    private String events;
+    public String events;
 
     public String getAway_id() {
         return away_id;
@@ -182,7 +182,7 @@ public class LiveScore {
     public String getLast_changed() {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+0:00"));
         String timeConverted = null;
         try {
             Date time = dateFormat.parse(last_changed);

@@ -16,6 +16,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import data.obtain.LoadData;
+import data.raw.History;
 import data.raw.LiveScore;
 import th.wc2018.R;
 import th.wc2018.adapter.LiveScoreAdapter;
@@ -37,13 +39,11 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_score_layout, container, false);
-
         listScoreView = (ListView) view.findViewById(R.id.list_live_score);
         swipe_content = (SwipeRefreshLayout) view.findViewById(R.id.swipe_content);
         swipe_content.setOnRefreshListener(this);
         liveScoreAdapter = new LiveScoreAdapter(getActivity(), 0, listLiveScoreData);
         listScoreView.setAdapter(liveScoreAdapter);
-
         // start thread to get live score
         Log.e("THE_DV", "is loaded: " + isLoaded);
 
@@ -97,6 +97,21 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
                 }
             });
             liveScoreApi.loadObjectFromIntenet();
+
+
+            LoadData loadData = null;
+            try {
+                loadData = new LoadData(getActivity(), "wcdata");
+            } catch (IllegalArgumentException w) {
+                w.printStackTrace();
+            }
+            for (Object liveScore : localListLiveScoreData) {
+                LiveScore liveScore1 = (LiveScore) liveScore;
+                if (liveScore1.getStatus().toLowerCase().equals("finished")) {
+                    loadData.getHistoryScoreDao().insert(History.makeHistory(liveScore1));
+                }
+            }
+
             return localListLiveScoreData;
         }
 
@@ -108,7 +123,6 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
                 Log.e("THE_DV", "Live SCORE EROOR on PUBLIC WHEN LOAD FROM INTERNET");
                 return;
             }
-
 
             boolean isContain = false;
             for (Object live : listLiveScoreData) {
@@ -125,8 +139,6 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
             if (!isContain) {
                 listLiveScoreData.add(li);
             }
-
-
             liveScoreAdapter.notifyDataSetChanged();
         }
 
@@ -139,7 +151,6 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
 //                listLiveScoreData.add(o);
 //            }
 //            liveScoreAdapter.notifyDataSetChanged();
-
 
             if (swipe_content != null)
                 swipe_content.setRefreshing(false);

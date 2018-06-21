@@ -99,7 +99,8 @@ public class CountryScore implements Comparable<CountryScore> {
             return -1;
         } else if (Integer.valueOf(this.getPOINT()) < Integer.valueOf(countryScore.getPOINT())) {
             return 1;
-        } else {
+        }
+        else {
             if (Integer.valueOf(this.getHIEU_SO()) > Integer.valueOf(countryScore.getHIEU_SO())) {
                 return -1;
             } else if (Integer.valueOf(this.getPOINT()) < Integer.valueOf(countryScore.getPOINT())) {

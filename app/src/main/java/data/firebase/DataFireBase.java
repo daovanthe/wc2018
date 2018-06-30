@@ -27,7 +27,7 @@ public class DataFireBase {
 
         DataFireBase.this.key = "ANRXirdyHL8ZET0o";
         DataFireBase.this.secret = "3j5Qj1Qf6FSvD9ZdXRbfipO0aXZPQZeU";
-        DataFireBase.this.legue1 = new ArrayList(Arrays.asList(new String[]{"793", "794", "795", "796", "797", "798", "799", "800"}));
+        DataFireBase.this.legue1 = new ArrayList(Arrays.asList(new String[]{"801", "802", "803", "804", "805"}));
 
 
 //        mDatabase.child("base").addValueEventListener(new ValueEventListener() {

@@ -13,7 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import data.obtain.LoadData;
@@ -27,6 +31,9 @@ public class GroupScoreFragment extends CommonFragment implements SwipeRefreshLa
     private List<Object> listGroupScore = new ArrayList<>();
     private SwipeRefreshLayout mSwipeContent;
     private boolean isLoaded = false;
+
+    AdView mAdView;
+
 
     @Nullable
     @Override
@@ -52,6 +59,11 @@ public class GroupScoreFragment extends CommonFragment implements SwipeRefreshLa
             LoadGroupDataFromSQLTask task = new LoadGroupDataFromSQLTask(getActivity());
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
+
+        mAdView = view.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         return view;
     }
 
@@ -67,7 +79,8 @@ public class GroupScoreFragment extends CommonFragment implements SwipeRefreshLa
         if (!isLoaded) {
             LoadGroupDataFromSQLTask task = new LoadGroupDataFromSQLTask(getActivity());
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        } if (isLoaded) {
+        }
+        if (isLoaded) {
             mSwipeContent.setRefreshing(false);
         }
     }
@@ -101,6 +114,7 @@ public class GroupScoreFragment extends CommonFragment implements SwipeRefreshLa
                 for (GroupScore GroupData : listGroupFromSqlData) {
                     groupDataFromListView.add(GroupData);
                 }
+                Collections.sort(listGroupFromSqlData);
                 loadData.closeConnect();
             }
             return groupDataFromListView;

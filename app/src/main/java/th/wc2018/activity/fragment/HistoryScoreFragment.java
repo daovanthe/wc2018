@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +34,8 @@ public class HistoryScoreFragment extends CommonFragment implements SwipeRefresh
     private List<Object> listHistoryScore = new ArrayList<>();
     private SwipeRefreshLayout swipe_content;
     private boolean isLoaded = false;
+
+    private AdView mAdView;
 
     @Override
     public void onResume() {
@@ -69,6 +74,12 @@ public class HistoryScoreFragment extends CommonFragment implements SwipeRefresh
         intentFilter.addAction(MAction.REQUEST_DATABASE_SCORE_CHANGE);
 //        getActivity().registerReceiver(mDataBaseChangeListener, intentFilter);
         // refresh elements
+
+        mAdView = view.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+
         return view;
     }
 

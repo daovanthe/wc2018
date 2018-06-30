@@ -104,7 +104,7 @@ public class LoadData {
                     home_country_score.setWin((Integer.valueOf(home_country_score.getWin()) + win) + "");
                     home_country_score.setLost((Integer.valueOf(home_country_score.getLost()) + lost) + "");
                     home_country_score.setDraw((Integer.valueOf(home_country_score.getDraw()) + draw) + "");
-                    home_country_score.setPOINT((Integer.valueOf(home_country_score.getDraw()) + point) + "");
+                    home_country_score.setPOINT((Integer.valueOf(home_country_score.getPOINT()) + point) + "");
                     home_country_score.setHIEU_SO((Integer.valueOf(home_country_score.getHIEU_SO()) + hieu_so) + "");
 
                 } else {
@@ -135,7 +135,7 @@ public class LoadData {
                     away_country_score.setWin((Integer.valueOf(away_country_score.getWin())) + win_away+ "");
                     away_country_score.setLost((Integer.valueOf(away_country_score.getLost())) + lost_away+ "");
                     away_country_score.setDraw((Integer.valueOf(away_country_score.getDraw())) + draw_away+ "");
-                    away_country_score.setPOINT((Integer.valueOf(away_country_score.getDraw())) + point_away+ "");
+                    away_country_score.setPOINT((Integer.valueOf(away_country_score.getPOINT())) + point_away+ "");
                     away_country_score.setHIEU_SO((Integer.valueOf(away_country_score.getHIEU_SO())) + hieu_so_away + "");
                 } else {
                     CountryScore away_country_score = new CountryScore(String.valueOf(away_name), String.valueOf(so_tran), String.valueOf(win_away), String.valueOf(draw_away), String.valueOf(lost_away), String.valueOf(ket_qua_away), String.valueOf(ket_qua_home), String.valueOf(hieu_so_away), String.valueOf(point_away));

@@ -13,11 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import data.obtain.LoadData;
-import data.raw.Events;
 import data.raw.History;
 import data.raw.LiveScore;
 import th.wc2018.R;
@@ -33,13 +35,17 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
     private SwipeRefreshLayout swipe_content;
     private ListView listScoreView;
 
+
+    private AdView mAdView;
+
+
     private boolean isLoaded = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_score_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment_live_score_layout, container, false);
         listScoreView = (ListView) view.findViewById(R.id.list_live_score);
         swipe_content = (SwipeRefreshLayout) view.findViewById(R.id.swipe_content);
         swipe_content.setOnRefreshListener(this);
@@ -56,6 +62,12 @@ public class LiveScoreFragment extends CommonFragment implements SwipeRefreshLay
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(MAction.REQUEST_DATABASE_SCORE_CHANGE);
+
+        mAdView = view.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+
         return view;
     }
 
